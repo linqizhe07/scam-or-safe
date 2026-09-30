@@ -1,56 +1,56 @@
 # Scam or Safe
 
-一个 Solana 交易识别游戏：屏幕上出现一笔钱包弹窗里的交易，30 秒内判断 **Scam** 还是 **Safe**。判错时，识别器解释为什么，指出红旗、怎么看出来、靠哪种证据才看得到。旁边有一个 agent 和你比：它先跑免费启发式，把握不够就在预算内花钱买检查（交易模拟、地址信誉、程序体检、域名核验），预算花光就停下说明。
+A Solana transaction-spotting game: a transaction shows up on screen the way a wallet popup would present it, and you have 30 seconds to call it **Scam** or **Safe**. When you get it wrong, the detector explains why: the red flags, how to spot them, and which kind of evidence it takes before they become visible. An agent competes against you: it runs the free heuristics first, and when it isn't confident enough it spends within a budget to buy checks (transaction simulation, address reputation, program check, domain verification); when the budget runs out it stops and says why.
 
-主体是识别器（`server/detector.js`）和它背后的 edge case 分类表（`data/taxonomy.json`，60 条）。游戏和 agent 都是它的两个用法。
+The core is the detector (`server/detector.js`) and the edge-case taxonomy behind it (`data/taxonomy.json`, 60 cases). The game and the agent are two ways of using it.
 
-## 跑起来
+## Run it
 
 ```bash
 npm install
 npm start          # http://127.0.0.1:4100
 ```
 
-另开一个终端让 agent 把全套题跑一遍（需要服务在跑）：
+In a second terminal, let the agent play the whole question set (the server has to be running):
 
 ```bash
 npm run agent
 ```
 
 ```bash
-npm test           # 识别器逐题验证 + 402 收费 + agent 循环
-npm run coverage   # 哪些 edge case 有题、哪些待出题
+npm test           # detector checked question by question + 402 paywall + agent loop
+npm run coverage   # which edge cases have a question and which are still waiting for one
 ```
 
-键盘：`←`/`s` Scam，`→`/`f` Safe，`a` 让 agent 判断，`Enter` 下一题。
+Keyboard: `←`/`s` Scam, `→`/`f` Safe, `a` let the agent decide, `Enter` next question.
 
-## 结构
+## Layout
 
 ```
 data/
-  taxonomy.json     edge case 分类表（源数据）：60 条，每条 → 规则 + 证据来源 + 答案
-  knowledge.json    地址 / 程序 / mint / 域名的“地面事实”，四条付费检查查的就是它
-  questions.json    题库：33 题（10 安全 / 23 骗局），每题引用 case
+  taxonomy.json     edge-case taxonomy (source data): 60 cases, each → rules + evidence source + answer
+  knowledge.json    "ground truth" for addresses / programs / mints / domains; the four paid checks look it up
+  questions.json    question bank: 33 questions (10 safe / 23 scams), each referencing its cases
 server/
-  detector.js       识别器：40 多条规则 → findings / verdict / confidence / 还缺哪种证据；coach() 生成判错解读
-  checks.js         四条检查：address / simulate / program / domain
-  payment.js        402 收费层（形状照 x402 V2）：mock 方案（无链）和 solana 方案骨架
-  knowledge.js      读题库和事实库；知识库没有的域名走启发式（子域名戏法 / 同形字 / 品牌词 / 拼写）
-  live.js           devnet 直连骨架（模拟、程序体检、到账核验、转账）—— 未验证
-  ledger.js         JSONL 账本
-  index.js          Express 入口：静态页 + 游戏 API + 付费路由 + agent 触发
+  detector.js       detector: 40-odd rules → findings / verdict / confidence / which evidence is still missing; coach() writes the wrong-answer explanation
+  checks.js         the four checks: address / simulate / program / domain
+  payment.js        402 paywall (shaped after x402 V2): mock scheme (no chain) and a solana scheme skeleton
+  knowledge.js      reads the question bank and the fact base; domains not in the knowledge base go through heuristics (subdomain trick / homoglyph / brand keyword / typosquat)
+  live.js           devnet skeleton (simulation, program check, payment verification, transfer) — unverified
+  ledger.js         JSONL ledger
+  index.js          Express entry point: static page + game API + paid routes + agent trigger
 agent/
-  loop.js           agent 循环：看题 → 免费启发式 → 买证据 → 重判 → 作答；buy() 处理 402
-  budget.js         预算计数器（总额 + 单笔上限）
-  payer.js          付款适配器：mock / solana
-  cli.js            命令行跑全套题
-web/                纯 HTML + JS 页面
-docs/edge-cases.md  怎么找 edge case、分类、数据形状、加一条 case 的流程
+  loop.js           agent loop: read the question → free heuristics → buy evidence → re-judge → answer; buy() handles the 402
+  budget.js         budget counter (total + per-purchase cap)
+  payer.js          payment adapter: mock / solana
+  cli.js            run the whole question set from the command line
+web/                plain HTML + JS page
+docs/edge-cases.md  how to find edge cases, the categories, data shapes, how to add a case
 ```
 
-## 付款怎么做
+## How payment works
 
-付费路由没有 `X-Payment` 头时返回 402，报价长这样：
+A paid route returns 402 when the `X-Payment` header is missing; the quote looks like this:
 
 ```json
 { "x402Version": 2, "error": "payment_required",
@@ -58,30 +58,30 @@ docs/edge-cases.md  怎么找 edge case、分类、数据形状、加一条 case
                 "payTo": "…", "resource": "/check/simulate", "nonce": "…", "maxTimeoutSeconds": 120 }] }
 ```
 
-- **mock**（默认）：agent 把 `{ nonce, amount, payer }` base64 后放进 `X-Payment`，服务端核对 nonce 未用过、金额够。没有链，一分钟能跑通。
-- **solana**：`PAYMENT_SCHEME=solana`，agent 真的在 devnet 转一笔 SOL（`AGENT_KEYPAIR`），签名当 proof，服务端查到账。这条路的四个函数在 `server/live.js`，**还没在 devnet 上跑过**。
-- **换成 x402**：卖家侧把 `paywall.charge()` 换成 `@x402/express` + `@x402/svm` 的中间件，agent 侧把 `agent/payer.js` 换成 `@x402/fetch` 的 `wrapFetchWithPayment`；`agent/loop.js` 的 `buy()` 和四条检查不用动。
+- **mock** (default): the agent base64-encodes `{ nonce, amount, payer }` into `X-Payment`; the server checks that the nonce is unused and the amount covers the price. No chain involved; it runs end to end in a minute.
+- **solana**: `PAYMENT_SCHEME=solana`; the agent makes a real SOL transfer on devnet (`AGENT_KEYPAIR`), the signature serves as the proof, and the server verifies the payment landed. The four functions on this path live in `server/live.js` and **have not been run on devnet yet**.
+- **Switching to x402**: on the seller side, replace `paywall.charge()` with the `@x402/express` + `@x402/svm` middleware; on the agent side, replace `agent/payer.js` with `wrapFetchWithPayment` from `@x402/fetch`. `buy()` in `agent/loop.js` and the four checks stay untouched.
 
-价格：模拟 $0.02、地址 $0.01、程序 $0.01、域名 $0.005。agent 默认总预算 $0.25、单笔上限 $0.05（`.env.example`）。
+Prices: simulation $0.02, address $0.01, program $0.01, domain $0.005. The agent's default total budget is $0.25 with a $0.05 per-purchase cap (`.env.example`).
 
-## agent 什么时候花钱
+## When the agent spends
 
-`analyze(surface, facts)` 返回 `confidence` 和 `missing`（还缺哪种证据）。置信度低于 0.8 就按信息量从高到低买：模拟 → 地址 → 程序 → 域名，每买一次重跑规则。买之前先过预算，被拒就带着理由停下。几种典型：
+`analyze(surface, facts)` returns `confidence` and `missing` (which evidence is still lacking). Below 0.8 confidence it buys in order of information value, highest first: simulation → address → program → domain, re-running the rules after every purchase. Each purchase goes through the budget first; if the budget refuses, the agent stops and reports the reason. A few typical runs:
 
-| 题 | 免费启发式 | 之后 |
+| Question | Free heuristics | Then |
 |---|---|---|
-| q01 无限授权 | 92% scam | 不花钱 |
-| q10 蜜罐币 | 50%，什么都没看出 | 买模拟（正常）→ 体检 MOON mint → permanentDelegate → scam |
-| q31 CPI 掏空 | 35%，只知道陌生程序碰了代币账户 | 买模拟：USDC −1000、什么都没进来 → scam |
-| q02 正常 swap | 65% safe | 买模拟 / 程序体检拿绿灯 → 95% safe |
+| q01 unlimited Approve | 92% scam | spends nothing |
+| q10 honeypot token | 50%, sees nothing | buys simulation (normal) → program check on the MOON mint → permanentDelegate → scam |
+| q31 CPI drain | 35%, only knows an unfamiliar program touched a token account | buys simulation: USDC −1000, nothing comes back → scam |
+| q02 normal swap | 65% safe | buys simulation / program check for the green lights → 95% safe |
 
-## 覆盖情况
+## Coverage
 
-60 条 case：45 条有题，10 条待出题，5 条 `depends`（要先定阈值）。`npm run coverage` 打印明细。
+60 cases: 45 have a question, 10 are still waiting for one, 5 are `depends` (a threshold has to be set first). `npm run coverage` prints the breakdown.
 
-## 已知限制
+## Known limitations
 
-- 题库里的交易是规范化 JSON，不是真的序列化交易。真构造 devnet 交易是下一步。
-- 地址 / 程序 / 域名的事实是知识库写死的；`LIVE=1` 只补了程序体检和模拟两条 devnet 路径，未测。
-- 识别器是规则引擎，不是模型。它的强项是解释得清楚，弱项是没见过的形状。
-- 一切地址除真实程序 ID / 官方 mint 外都是虚构的。
+- The transactions in the question bank are normalized JSON, not real serialized transactions. Building real devnet transactions is the next step.
+- The facts about addresses / programs / domains are hard-coded in the knowledge base; `LIVE=1` only adds the program-check and simulation devnet paths, and neither has been tested.
+- The detector is a rule engine, not a model. Its strength is clear explanations; its weakness is shapes it has never seen.
+- Every address is fictional except real program IDs / official mints.

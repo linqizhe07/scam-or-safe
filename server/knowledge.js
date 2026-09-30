@@ -1,4 +1,4 @@
-// 题库 + 地面事实的读取。四条付费检查查的就是这里；LIVE=1 时查不到的再去 devnet（live.js）。
+// Loads the question bank and the ground truth. The four paid checks read from here; with LIVE=1, misses fall through to devnet (live.js).
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,9 +23,9 @@ export function loadKnowledge() {
 
   return {
     taxonomy, kb, questions, byId, caseById,
-    // 玩家 / agent 能看到的：不含 truth、simulation、lesson
+    // What the player / agent can see: no truth, simulation or lesson
     publicView(q) { return { id: q.id, index: q.index, total: questions.length, title: q.title, surface: q.surface }; },
-    // 教学用：全部事实
+    // For coaching: all the facts
     fullFacts(q) {
       return { simulation: q.simulation, addresses: kb.addresses, programs: kb.programs, domain: q.surface.domain ? domainInfo(q.surface.domain) : undefined };
     },
@@ -36,7 +36,7 @@ export function loadKnowledge() {
   };
 }
 
-// 知识库里没有的域名：能免费推断的部分（子域名戏法、非 ASCII、和已知域名只差一两个字符、含品牌词）
+// Domains not in the knowledge base: what can be inferred for free (subdomain trick, non-ASCII, one or two characters off a known domain, embedded brand word)
 export function domainHeuristics(name, knownDomains = []) {
   const parts = name.split('.');
   const root = parts.length <= 2 ? name : parts.slice(-2).join('.');
@@ -44,7 +44,7 @@ export function domainHeuristics(name, knownDomains = []) {
   if (out.known) { out.officialOf = root; return out; }
   if (/[^\x00-\x7F]/.test(name)) { const ascii = name.normalize('NFKD').replace(/[^\x00-\x7F]/g, 'u'); const hit = knownDomains.find((k) => k === ascii); return { ...out, lookalikeOf: hit || ascii, lookalikeKind: 'homoglyph' }; }
   const embedded = knownDomains.find((k) => name !== k && !name.endsWith('.' + k) && name.includes(k));
-  if (embedded) return { ...out, lookalikeOf: embedded, lookalikeKind: 'subdomain', notes: `根域名是 ${root}` };
+  if (embedded) return { ...out, lookalikeOf: embedded, lookalikeKind: 'subdomain', notes: `The root domain is ${root}.` };
   const brand = knownDomains.find((k) => { const b = k.split('.')[0]; return b.length >= 3 && root.split('.')[0].includes(b); });
   if (brand) return { ...out, lookalikeOf: brand, lookalikeKind: 'brand' };
   const typo = knownDomains.find((k) => levenshtein(root, k) <= 2);

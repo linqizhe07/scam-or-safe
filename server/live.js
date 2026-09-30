@@ -1,12 +1,12 @@
-// devnet 直连骨架。所有函数都是动态加载 @solana/web3.js，没装也不影响 mock 模式。
-// ⚠ 这一层还没有在 devnet 上跑过（写骨架时沙盒没有网络）。接 solana 方案的第一件事是把这四个函数各跑一遍。
+// Direct devnet skeleton. Every function loads @solana/web3.js dynamically, so mock mode works without it installed.
+// WARNING: this layer has never been run against devnet (the sandbox had no network when the skeleton was written). The first step of wiring up the solana scheme is to run each of these four functions once.
 
 async function web3() {
   try { return await import('@solana/web3.js'); }
-  catch { throw new Error('需要 @solana/web3.js：npm i @solana/web3.js'); }
+  catch { throw new Error('@solana/web3.js is required: npm i @solana/web3.js'); }
 }
 
-// 把 base64 交易丢给 devnet 模拟，返回 logs / err / unitsConsumed。余额差要自己算（accounts 配置 + pre/post）。
+// Sends a base64 transaction to devnet for simulation; returns logs / err / unitsConsumed. Balance deltas must be computed separately (accounts config + pre/post).
 export async function simulateBase64(txBase64, rpc) {
   const { Connection, VersionedTransaction } = await web3();
   const conn = new Connection(rpc, 'confirmed');
@@ -15,7 +15,7 @@ export async function simulateBase64(txBase64, rpc) {
   return { ok: !r.value.err, error: r.value.err ? JSON.stringify(r.value.err) : null, logs: r.value.logs, unitsConsumed: r.value.unitsConsumed, source: 'devnet' };
 }
 
-// 程序体检：是不是可升级程序、升级权限是谁。ProgramData 布局：4 字节枚举(3) + 8 字节 slot + 1 字节 option + 32 字节 authority。
+// Program check: whether it is an upgradeable program and who holds the upgrade authority. ProgramData layout: 4-byte enum (3) + 8-byte slot + 1-byte option + 32-byte authority.
 export async function programInfo(address, rpc) {
   const { Connection, PublicKey } = await web3();
   const conn = new Connection(rpc, 'confirmed');
@@ -38,7 +38,7 @@ export async function programInfo(address, rpc) {
   return out;
 }
 
-// 收款方核验一笔 SOL 转账：payTo 的余额在这笔交易里至少增加了 minLamports。
+// Payee-side verification of a SOL transfer: payTo's balance increased by at least minLamports in this transaction.
 export async function verifySolTransfer({ signature, payTo, minLamports, rpc }) {
   const { Connection } = await web3();
   const conn = new Connection(rpc, 'confirmed');
@@ -51,7 +51,7 @@ export async function verifySolTransfer({ signature, payTo, minLamports, rpc }) 
   return delta >= minLamports ? { ok: true, delta } : { ok: false, reason: 'amount_too_low', delta };
 }
 
-// agent 侧付款：从 keypair 转 lamports 到 payTo，memo 里写 nonce，返回签名。
+// Agent-side payment: transfers lamports from the keypair to payTo, writes the nonce in a memo, and returns the signature.
 export async function sendSolTransfer({ keypairSecret, to, lamports, memo, rpc }) {
   const { Connection, Keypair, PublicKey, SystemProgram, Transaction, TransactionInstruction, sendAndConfirmTransaction } = await web3();
   const conn = new Connection(rpc, 'confirmed');

@@ -1,5 +1,5 @@
-// 预算计数器：agent 花钱前先 reserve，被拒就带着理由停下。刻意做成最简：总额 + 单笔上限 + 花费历史。
-// （接 agentpay 的话，这一层换成 MandateWallet 的策略闸，接口不变。）
+// Budget counter: the agent reserves before spending, and a refusal comes with a reason. Deliberately minimal: a total, a per-call cap, and spend history.
+// (When wired to agentpay, this layer becomes MandateWallet's policy gate; the interface stays the same.)
 export function createBudget({ limitUsd = 0.25, perCallMaxUsd = 0.05 } = {}) {
   let spent = 0;
   const history = [];
@@ -7,8 +7,8 @@ export function createBudget({ limitUsd = 0.25, perCallMaxUsd = 0.05 } = {}) {
   return {
     limitUsd, perCallMaxUsd,
     reserve(priceUsd, why = '') {
-      if (priceUsd > perCallMaxUsd) return { ok: false, reason: 'per_call_max', detail: `单笔 $${priceUsd} 超过上限 $${perCallMaxUsd}`, remaining: round(limitUsd - spent) };
-      if (spent + priceUsd > limitUsd + 1e-9) return { ok: false, reason: 'budget_exhausted', detail: `剩余 $${round(limitUsd - spent)}，不够付 $${priceUsd}`, remaining: round(limitUsd - spent) };
+      if (priceUsd > perCallMaxUsd) return { ok: false, reason: 'per_call_max', detail: `a single call of $${priceUsd} exceeds the cap of $${perCallMaxUsd}`, remaining: round(limitUsd - spent) };
+      if (spent + priceUsd > limitUsd + 1e-9) return { ok: false, reason: 'budget_exhausted', detail: `$${round(limitUsd - spent)} left, not enough for $${priceUsd}`, remaining: round(limitUsd - spent) };
       spent = round(spent + priceUsd);
       history.push({ priceUsd, why, ts: Date.now() });
       return { ok: true, remaining: round(limitUsd - spent) };

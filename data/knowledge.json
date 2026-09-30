@@ -1,90 +1,90 @@
 {
-  "_readme": "四条付费检查查的“地面事实”。除了真实的程序 ID / mint（System、Token、Jupiter、Marinade、Raydium、Orca、Candy Machine、USDC、mSOL、RAY、wSOL），其余地址全是虚构的，用来出题。LIVE=1 时知识库里没有的地址 / 程序会去 devnet 查（server/live.js，未验证）。",
+  "_readme": "The “ground truth” the four paid checks look up. Apart from the real program IDs / mints (System, Token, Jupiter, Marinade, Raydium, Orca, Candy Machine, USDC, mSOL, RAY, wSOL), every address is fictional and exists only for the questions. With LIVE=1, addresses / programs missing from the knowledge base are looked up on devnet (server/live.js, unverified).",
   "user": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t",
   "addresses": {
     "DrA1nMkQ7vXcP4tYzB9nLs2wEfG6hJkR8uVaN3iZ5pWo": {
-      "label": "已知 drainer",
+      "label": "Known drainer",
       "reputation": "drainer",
       "firstSeenDaysAgo": 40,
-      "notes": "被 300+ 个钱包举报；累计 120 万 USDC 流入后转到混币服务"
+      "notes": "Reported by 300+ wallets; 1.2M USDC in total flowed in and was forwarded to a mixing service"
     },
     "DrB2nKpR8wYdQ5uZaC3mMt4xFgH7jLkS9vWbP4oA6qXe": {
-      "label": "新 drainer",
+      "label": "New drainer",
       "reputation": "drainer",
       "firstSeenDaysAgo": 3,
-      "notes": "48 小时内收到 41 笔 SOL 转入，全部立即转出"
+      "notes": "Received 41 SOL transfers in 48 hours, all forwarded immediately"
     },
     "AtKr9zPq3vW7mXbN2cL5jYdH8sF4gTeR6uKaV1nZ8iQx": {
-      "label": "权限收集者",
+      "label": "Authority collector",
       "reputation": "scam",
       "firstSeenDaysAgo": 12,
-      "notes": "名下有 87 个被改过所有权 / 关闭权限的代币账户和 14 个被改过 withdrawer 的质押账户"
+      "notes": "Holds 87 token accounts whose owner / close authority was changed and 14 stake accounts whose withdrawer was changed"
     },
     "AtKrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV": {
-      "label": "权限收集者的 USDC 账户",
+      "label": "Authority collector's USDC account",
       "reputation": "scam",
       "firstSeenDaysAgo": 12,
-      "notes": "owner 是 AtKr9zPq…"
+      "notes": "owner is AtKr9zPq…"
     },
     "7xKXjT2cP8yN5bQm4WvRz9sLaHdF6kGeU3nJ1iX7MqS": {
-      "label": "投毒地址",
+      "label": "Poisoning address",
       "reputation": "poisoning",
       "firstSeenDaysAgo": 2,
-      "notes": "48 小时内向 900 个地址发送 0 USDC 灰尘转账；与通讯录地址 7xKX…7MqS 前后 4 位相同"
+      "notes": "Sent 0 USDC dust transfers to 900 addresses in 48 hours; shares the first and last 4 characters with address book entry 7xKX…7MqS"
     },
     "DappTreasury7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV": {
-      "label": "“mint”收款地址",
+      "label": "“Mint” payment address",
       "reputation": "scam",
       "firstSeenDaysAgo": 5,
-      "notes": "收到 2 SOL × 340 笔；链上没有发生过任何 mint"
+      "notes": "Received 2 SOL × 340 times; no mint has ever happened on-chain"
     },
     "DappFeeSink7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7": {
-      "label": "“network fee”收款地址",
+      "label": "“Network fee” payment address",
       "reputation": "drainer",
       "firstSeenDaysAgo": 8,
-      "notes": "每笔收款都是付款人 SOL 余额的 95% 以上"
+      "notes": "Every payment received is over 95% of the payer's SOL balance"
     },
     "CndyTreasuryFake7Q9vB2nLpZc6YdW8fHsJ3aGkE5uT": {
-      "label": "假 mint 站收款地址",
+      "label": "Fake mint site payment address",
       "reputation": "scam",
       "firstSeenDaysAgo": 6,
-      "notes": "页面标价 0.1 SOL，实际每笔收 1 SOL"
+      "notes": "Page lists 0.1 SOL; actually collects 1 SOL per transaction"
     },
     "7xKXm4RtQ9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7MqS": {
       "label": "Alice",
       "reputation": "known",
       "firstSeenDaysAgo": 400,
-      "notes": "通讯录联系人；有 60 多笔往来"
+      "notes": "Address book contact; 60+ transactions back and forth"
     },
     "ExCh4ngeDepositAddr7Q9vB2nLpZc6YdW8fHsJ3aGkE": {
-      "label": "Binance 充值地址",
+      "label": "Binance deposit address",
       "reputation": "known",
       "firstSeenDaysAgo": 900,
-      "notes": "交易所热钱包，日均数万笔转入"
+      "notes": "Exchange hot wallet; tens of thousands of deposits per day"
     },
     "ExChUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7": {
-      "label": "Binance 充值地址的 USDC 账户",
+      "label": "Binance deposit address's USDC account",
       "reputation": "known",
       "firstSeenDaysAgo": 900,
-      "notes": "owner 是 ExCh4nge…"
+      "notes": "owner is ExCh4nge…"
     },
     "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1": {
       "label": "Raydium AMM authority",
       "reputation": "program",
       "firstSeenDaysAgo": 1300,
-      "notes": "Raydium AMM v4 的 PDA，作为 delegate 出现是 swap 的标准写法"
+      "notes": "Raydium AMM v4's PDA; appearing as the delegate is the standard swap pattern"
     },
     "HtWaKeyQ7vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7MqSx": {
-      "label": "热钱包",
+      "label": "Hot wallet",
       "reputation": "unknown",
       "firstSeenDaysAgo": 2,
-      "notes": "是 UnKnwnPrg… 和 JUP6Lkb7fake… 两个程序的升级权限"
+      "notes": "Upgrade authority of both the UnKnwnPrg… and JUP6Lkb7fake… programs"
     },
     "NftMktLiteEscrow7Q9vB2nLpZc6YdW8fHsJ3aGkE5uT": {
-      "label": "自称“市场托管”",
+      "label": "Self-described “marketplace escrow”",
       "reputation": "scam",
       "firstSeenDaysAgo": 6,
-      "notes": "普通钱包而非程序 PDA；名下 210 个被委托的 NFT 账户，已转走 63 个"
+      "notes": "A plain wallet, not a program PDA; holds delegation over 210 NFT accounts and has already transferred 63 away"
     }
   },
   "programs": {
@@ -130,7 +130,7 @@
     },
     "JUP6Lkb7fakeQ9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV": {
       "kind": "program",
-      "name": "自称 Jupiter Aggregator v6",
+      "name": "self-described Jupiter Aggregator v6",
       "verified": false,
       "upgradeable": true,
       "upgradeAuthorityKind": "hot-wallet",
@@ -140,7 +140,7 @@
     },
     "UnKnwnPrg4Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7M": {
       "kind": "program",
-      "name": "未命名程序",
+      "name": "unnamed program",
       "verified": false,
       "upgradeable": true,
       "upgradeAuthorityKind": "hot-wallet",
@@ -156,7 +156,7 @@
       "extensions": [],
       "ageDays": 1500,
       "holders": 3000000,
-      "notes": "合规稳定币的 freeze / mint 权限属于发行方，是常态不是红旗"
+      "notes": "A regulated stablecoin's freeze / mint authority belongs to the issuer; that is normal, not a red flag"
     },
     "mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So": {
       "kind": "mint",
@@ -200,12 +200,12 @@
       ],
       "ageDays": 1,
       "holders": 12,
-      "notes": "permanentDelegate 是热钱包 HtWaKey…；已冻结 4 个买家账户"
+      "notes": "permanentDelegate is the hot wallet HtWaKey…; 4 buyer accounts already frozen"
     },
     "FakeUsdcMint7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1o": {
       "kind": "mint",
       "symbol": "USDC",
-      "name": "USDC（假）",
+      "name": "USDC (fake)",
       "impersonates": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
       "freezeAuthorityKind": "hot-wallet",
       "mintAuthorityKind": "hot-wallet",
@@ -222,18 +222,18 @@
       "extensions": [],
       "ageDays": 500,
       "holders": 1,
-      "notes": "用户钱包里的 NFT，地板价约 90 SOL"
+      "notes": "NFT in the user's wallet; floor price about 90 SOL"
     },
     "SpamNftMintA7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1o": {
       "kind": "mint",
       "symbol": "FREE 5000 USDC",
-      "name": "空投垃圾 NFT",
+      "name": "airdrop spam NFT",
       "freezeAuthorityKind": "none",
       "mintAuthorityKind": "none",
       "extensions": [],
       "ageDays": 2,
       "holders": 12000,
-      "notes": "metadata 里带钓鱼链接"
+      "notes": "phishing link in the metadata"
     }
   },
   "domains": {
@@ -311,7 +311,7 @@
       "lookalikeOf": "jup.ag",
       "lookalikeKind": "subdomain",
       "registeredDaysAgo": 3,
-      "notes": "根域名是 swap-app.com"
+      "notes": "root domain is swap-app.com"
     },
     "orca-swap.finance": {
       "known": false,
@@ -338,7 +338,7 @@
       "lookalikeOf": "jup.ag",
       "lookalikeKind": "homoglyph",
       "registeredDaysAgo": 2,
-      "notes": "第二个字母是希腊字母 υ (U+03C5)，punycode xn--jp-8cd.ag"
+      "notes": "second letter is the Greek letter υ (U+03C5); punycode xn--jp-8cd.ag"
     },
     "mint-okaybears.xyz": {
       "known": false,

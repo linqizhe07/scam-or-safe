@@ -1,8 +1,8 @@
-// 402 收费层。形状照着 x402 V2 的 PAYMENT-REQUIRED / X-PAYMENT 来，方便以后整层换成 @x402/express + @x402/svm。
+// The 402 paywall layer. Shaped after x402 V2's PAYMENT-REQUIRED / X-PAYMENT so the whole layer can later be swapped for @x402/express + @x402/svm.
 //
-//   scheme = mock   ：没有链。402 报价里带一个 nonce，付款方把 { nonce, amount, payer } 放进 X-Payment 头，
-//                     服务端只核对 nonce 未用过、金额够。适合本地跑游戏。
-//   scheme = solana ：X-Payment 里的 proof 是 devnet 交易签名，服务端用 live.verifySolTransfer 核对到账。未验证。
+//   scheme = mock   : no chain. The 402 quote carries a nonce; the payer puts { nonce, amount, payer } in the X-Payment header,
+//                     and the server only checks that the nonce is unused and the amount is enough. Good for running the game locally.
+//   scheme = solana : the proof in X-Payment is a devnet transaction signature; the server confirms receipt with live.verifySolTransfer. Untested.
 import crypto from 'node:crypto';
 import * as live from './live.js';
 
@@ -38,7 +38,7 @@ export function createPaywall({ scheme = 'mock', payTo, network = 'solana:devnet
     return { ok: true, receipt };
   }
 
-  // Express 中间件：paywall.charge(0.02, '交易模拟')
+  // Express middleware: paywall.charge(0.02, 'Transaction simulation')
   function charge(priceUsd, description) {
     return async (req, res, next) => {
       const header = req.get('x-payment');

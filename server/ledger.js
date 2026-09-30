@@ -1,4 +1,4 @@
-// JSONL 账本：agent 每一笔付款（成功 / 拒绝 / 失败）追加一行。
+// JSONL ledger: one line appended per agent payment (settled / refused / failed).
 import fs from 'node:fs';
 import path from 'node:path';
 

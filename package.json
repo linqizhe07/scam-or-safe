@@ -2,7 +2,7 @@
   "name": "scam-or-safe",
   "version": "0.1.0",
   "private": true,
-  "description": "Scam or Safe：Solana 交易识别游戏。人 vs agent，agent 在预算内花钱买检查；判错后由识别器解释为什么。",
+  "description": "Scam or Safe: a Solana transaction-spotting game. Human vs agent; the agent buys checks within a budget, and the detector explains every wrong answer.",
   "type": "module",
   "engines": { "node": ">=20" },
   "scripts": {

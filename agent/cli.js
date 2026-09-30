@@ -1,4 +1,4 @@
-// 命令行把整套题跑一遍：node agent/cli.js [--base http://localhost:4100] [--budget 0.25]
+// Runs the whole question bank from the command line: node agent/cli.js [--base http://localhost:4100] [--budget 0.25]
 import { playRound } from './loop.js';
 import { createBudget } from './budget.js';
 import { createPayer } from './payer.js';
@@ -18,7 +18,7 @@ for (const { id } of list) {
   const graded = await (await fetch(`${baseUrl}/api/questions/${id}/answer`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ who: 'agent', answer: r.verdict }) })).json();
   rows.push({ id, title: question.title, answer: r.verdict, truth: graded.truth, correct: graded.correct, confidence: r.confidence, spent: r.spentUsd });
 }
-console.log('\n结果：');
+console.log('\nResults:');
 console.table(rows);
 const right = rows.filter((r) => r.correct).length;
-console.log(`${right}/${rows.length} 正确，共花 $${budget.spent().toFixed(3)}（预算 $${budget.limitUsd}）`);
+console.log(`${right}/${rows.length} correct, spent $${budget.spent().toFixed(3)} in total (budget $${budget.limitUsd})`);

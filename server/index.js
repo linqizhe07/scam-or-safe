@@ -1,4 +1,4 @@
-// 入口：静态页 + 游戏 API + 四条付费检查 + agent 触发。
+// Entry point: static pages + game API + the four paid checks + the agent trigger.
 import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -27,11 +27,11 @@ export function createApp(env = process.env) {
   const app = express();
   app.use(express.json({ limit: '64kb' }));
   app.use(express.static(path.join(here, '..', 'web')));
-  app.locals.baseUrl = null; // listen 之后填
+  app.locals.baseUrl = null; // filled in after listen
 
   app.get('/health', (_req, res) => res.json({ ok: true, scheme, questions: knowledge.questions.length, prices: EVIDENCE_PRICES_USD }));
 
-  // ---- 游戏 ----
+  // ---- Game ----
   app.get('/api/questions', (_req, res) => res.json(knowledge.questions.map((q) => ({ id: q.id, index: q.index, title: q.title, answered: state.answers[q.id] || null }))));
   app.get('/api/questions/:id', (req, res) => {
     const q = knowledge.byId.get(req.params.id);
@@ -66,8 +66,8 @@ export function createApp(env = process.env) {
   app.post('/api/reset', (_req, res) => { state.scores = { human: { right: 0, wrong: 0 }, agent: { right: 0, wrong: 0 } }; state.answers = {}; budget.reset(); ledger.clear(); res.json({ ok: true }); });
   app.get('/api/taxonomy', (_req, res) => res.json(knowledge.taxonomy));
 
-  // ---- 四条付费检查 ----
-  const paid = (kind, fn) => [paywall.charge(EVIDENCE_PRICES_USD[kind], { simulation: '交易模拟', addresses: '地址信誉', programs: '程序 / mint 体检', domain: '域名核验' }[kind]), async (req, res) => {
+  // ---- The four paid checks ----
+  const paid = (kind, fn) => [paywall.charge(EVIDENCE_PRICES_USD[kind], { simulation: 'Transaction simulation', addresses: 'Address reputation', programs: 'Program / mint check', domain: 'Domain verification' }[kind]), async (req, res) => {
     try { res.json(await fn(req.body || {})); }
     catch (e) { res.status(400).json({ error: e.message }); }
   }];
@@ -92,5 +92,5 @@ export function start(env = process.env) {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const { baseUrl, knowledge, paywall } = await start();
-  console.log(`Scam or Safe  →  ${baseUrl}\n  题目 ${knowledge.questions.length} 道 · 付款方案 ${paywall.scheme} · 检查价格 ${JSON.stringify(EVIDENCE_PRICES_USD)}`);
+  console.log(`Scam or Safe  →  ${baseUrl}\n  ${knowledge.questions.length} questions · payment scheme ${paywall.scheme} · check prices ${JSON.stringify(EVIDENCE_PRICES_USD)}`);
 }

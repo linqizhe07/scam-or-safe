@@ -1,5 +1,5 @@
 {
-  "_readme": "题库样例。surface = 钱包弹窗里玩家和 agent 能看到的一切；simulation = 付费模拟检查返回的余额 / 权限变化（答题前不下发）；truth 和 lesson 只在答题后返回。case 引用 taxonomy.json。defaults 会合并进每道题的 surface。指令字段约定见 docs/edge-cases.md。",
+  "_readme": "Sample question bank. surface = everything the player and the agent can see in the wallet popup; simulation = the balance / authority changes returned by the paid simulation check (not sent before answering); truth and lesson are returned only after answering. case references taxonomy.json. defaults are merged into every question's surface. Instruction field conventions are in docs/edge-cases.md.",
   "defaults": {
     "user": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t",
     "userAccounts": [
@@ -25,7 +25,7 @@
   },
   "questions": [
     {
-      "id": "q01", "case": ["A1", "F1", "E1"], "title": "领取 JUP 空投",
+      "id": "q01", "case": ["A1", "F1", "E1"], "title": "Claim JUP airdrop",
       "surface": {
         "domain": "jup-airdrop.xyz", "prompt": "Claim 1,250 JUP airdrop",
         "instructions": [
@@ -33,10 +33,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.000005 }, "tokens": [], "delegates": [ { "account": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "delegate": "DrA1nMkQ7vXcP4tYzB9nLs2wEfG6hJkR8uVaN3iZ5pWo", "amount": "unlimited" } ], "authorities": [] },
-      "truth": "scam", "lesson": "领取空投不需要你授权任何东西。Approve 是把“花你钱的权利”交给别人，交易本身不动钱，所以钱包模拟看起来风平浪静。"
+      "truth": "scam", "lesson": "Claiming an airdrop never requires you to approve anything. Approve hands someone else “the right to spend your money”; the transaction itself moves nothing, so the wallet simulation looks perfectly calm."
     },
     {
-      "id": "q02", "case": ["G6", "B7", "H3"], "title": "Jupiter 兑换 1 SOL",
+      "id": "q02", "case": ["G6", "B7", "H3"], "title": "Jupiter swap 1 SOL",
       "surface": {
         "domain": "jup.ag", "prompt": "Swap 1 SOL → USDC",
         "instructions": [
@@ -50,10 +50,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -1.0003 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": 149.1 } ], "delegates": [], "authorities": [] },
-      "truth": "safe", "lesson": "指令多不等于危险。逐条看收款方：SOL 转进的是你自己的 wSOL 账户，关闭账户退回的也是你自己，路由程序是已验证的 Jupiter。"
+      "truth": "safe", "lesson": "Many instructions does not mean danger. Check each recipient: the SOL goes into your own wSOL account, the close refunds to you, and the router is the verified Jupiter program."
     },
     {
-      "id": "q03", "case": ["B1"], "title": "给 Alice 转 500 USDC",
+      "id": "q03", "case": ["B1"], "title": "Send 500 USDC to Alice",
       "surface": {
         "domain": null, "prompt": "Send 500 USDC to Alice",
         "instructions": [
@@ -61,10 +61,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.000005 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": -500 } ], "delegates": [], "authorities": [] },
-      "truth": "scam", "lesson": "地址投毒：前 4 位和后 4 位与 Alice 一样，中间不一样。从历史记录复制地址前，把整串和通讯录对一遍。"
+      "truth": "scam", "lesson": "Address poisoning: the first 4 and last 4 characters match Alice, the middle does not. Before copying an address from history, compare the full string against your address book."
     },
     {
-      "id": "q04", "case": ["A4", "F1", "E1"], "title": "免费领 Mad Lads 通行证",
+      "id": "q04", "case": ["A4", "F1", "E1"], "title": "Claim free Mad Lads pass",
       "surface": {
         "domain": "magiceden-claim.net", "prompt": "Claim your free Mad Lads pass",
         "balances": { "sol": 8.0, "tokens": { "USDC": 1500, "wSOL": 8.2, "Mad Lads #1234": 1 } },
@@ -74,10 +74,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.000005 }, "tokens": [], "delegates": [], "authorities": [ { "account": "UsrWso1Ata7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "type": "CloseAccount", "from": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "to": "AtKr9zPq3vW7mXbN2cL5jYdH8sF4gTeR6uKaV1nZ8iQx" } ] },
-      "truth": "scam", "lesson": "不改所有者也能拿钱：wSOL 账户被关闭时，里面 8.2 SOL 的 lamports 归关闭者。SetAuthority 的任何一种 authorityType 给了别人都是失控。"
+      "truth": "scam", "lesson": "Money can be taken without changing the owner: when the wSOL account is closed, its 8.2 SOL in lamports goes to whoever closes it. Handing any SetAuthority authorityType to someone else means losing control."
     },
     {
-      "id": "q05", "case": ["C1", "I1"], "title": "签名验证钱包",
+      "id": "q05", "case": ["C1", "I1"], "title": "Sign to verify wallet",
       "surface": {
         "domain": "phantom-verify.app", "prompt": "Your wallet will be suspended in 10 minutes. Sign to verify wallet ownership.",
         "durableNonce": true, "walletSimulation": "failed",
@@ -87,11 +87,11 @@
           { "program": "11111111111111111111111111111111", "programLabel": "System", "type": "Transfer", "label": "Verify", "accounts": { "from": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "to": "DrB2nKpR8wYdQ5uZaC3mMt4xFgH7jLkS9vWbP4oA6qXe" }, "args": { "lamports": 12400000000, "uiAmount": 12.4, "symbol": "SOL" } }
         ]
       },
-      "simulation": { "ok": true, "sol": { "pre": 12.5, "delta": -12.4 }, "tokens": [], "delegates": [], "authorities": [], "notes": "钱包模拟失败是因为 durable nonce 交易需要 nonce 账户里的区块哈希；用 replaceRecentBlockhash 重新模拟就能看到 12.4 SOL 转出" },
-      "truth": "scam", "lesson": "“验证钱包”从来不需要签交易，签消息就够了。durable nonce 交易签完不会立刻广播，对方几天后再发，你已经忘了自己签过什么。"
+      "simulation": { "ok": true, "sol": { "pre": 12.5, "delta": -12.4 }, "tokens": [], "delegates": [], "authorities": [], "notes": "Wallet simulation failed because a durable nonce transaction needs the blockhash stored in the nonce account; re-simulating with replaceRecentBlockhash shows 12.4 SOL leaving" },
+      "truth": "scam", "lesson": "“Verifying a wallet” never needs a transaction; signing a message is enough. A durable nonce transaction is not broadcast right away; the other party sends it days later, after you have forgotten what you signed."
     },
     {
-      "id": "q06", "case": ["C3"], "title": "免 gas 领取",
+      "id": "q06", "case": ["C3"], "title": "Gasless claim",
       "surface": {
         "domain": "gasless-claim.xyz", "prompt": "Gasless claim — 0 fee, sponsored by us",
         "feePayer": "AtKr9zPq3vW7mXbN2cL5jYdH8sF4gTeR6uKaV1nZ8iQx",
@@ -100,10 +100,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": 0 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": -1500 } ], "delegates": [], "authorities": [] },
-      "truth": "scam", "lesson": "谁付 gas 不重要，谁签名才重要。fee payer 是对方只说明对方愿意花 0.000005 SOL 拿走你 1500 USDC。"
+      "truth": "scam", "lesson": "Who pays the gas does not matter; who signs does. The other party being fee payer only means they are willing to spend 0.000005 SOL to take your 1500 USDC."
     },
     {
-      "id": "q07", "case": ["C4", "A2"], "title": "领取质押奖励",
+      "id": "q07", "case": ["C4", "A2"], "title": "Claim staking rewards",
       "surface": {
         "domain": "solana-rewards.io", "prompt": "Claim staking rewards",
         "addressLookupTables": ["A1tTab1e7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7MqS"], "walletSimulation": "unavailable",
@@ -111,11 +111,11 @@
           { "program": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA", "programLabel": "SPL Token", "type": "ApproveChecked", "label": "Claim", "accounts": { "source": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "delegate": { "lookup": "A1tTab1e7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7MqS", "index": 3 }, "owner": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" }, "args": { "amount": "1500000000", "uiAmount": 1500, "symbol": "USDC", "decimals": 6 } }
         ]
       },
-      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.000005 }, "tokens": [], "delegates": [ { "account": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "delegate": "DrA1nMkQ7vXcP4tYzB9nLs2wEfG6hJkR8uVaN3iZ5pWo", "amount": "1500" } ], "authorities": [], "notes": "Lookup table 第 3 项解析为 DrA1nMkQ…" },
-      "truth": "scam", "lesson": "钱包显示“未知账户”时，那个账户就是整笔交易里最重要的东西。额度刚好等于你的全部 USDC 也不是巧合。"
+      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.000005 }, "tokens": [], "delegates": [ { "account": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "delegate": "DrA1nMkQ7vXcP4tYzB9nLs2wEfG6hJkR8uVaN3iZ5pWo", "amount": "1500" } ], "authorities": [], "notes": "Lookup table entry 3 resolves to DrA1nMkQ…" },
+      "truth": "scam", "lesson": "When the wallet shows “unknown account”, that account is the most important thing in the whole transaction. An amount exactly equal to all your USDC is no coincidence either."
     },
     {
-      "id": "q08", "case": ["H1"], "title": "注册 alice.sol 域名",
+      "id": "q08", "case": ["H1"], "title": "Register alice.sol domain",
       "surface": {
         "domain": "snsdomains-register.xyz", "prompt": "Register alice.sol for 0.02 SOL",
         "instructions": [
@@ -124,11 +124,11 @@
           { "program": "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr", "programLabel": "Memo", "type": "Memo", "args": { "text": "register alice.sol" } }
         ]
       },
-      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -7.000005 }, "tokens": [], "delegates": [], "authorities": [], "feeLamports": 7000005000, "notes": "1,400,000 CU × 5,000,000,000 microLamports = 7 SOL 优先费" },
-      "truth": "scam", "lesson": "没有任何转账指令也能掏空：优先费 = units × microLamports。看到 SetComputeUnitPrice 就算一下。"
+      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -7.000005 }, "tokens": [], "delegates": [], "authorities": [], "feeLamports": 7000005000, "notes": "1,400,000 CU × 5,000,000,000 microLamports = 7 SOL priority fee" },
+      "truth": "scam", "lesson": "You can be drained with no transfer instruction at all: priority fee = units × microLamports. Whenever you see SetComputeUnitPrice, do the math."
     },
     {
-      "id": "q09", "case": ["D5"], "title": "Jupiter 兑换 0.5 SOL（官方域名）",
+      "id": "q09", "case": ["D5"], "title": "Jupiter swap 0.5 SOL (official domain)",
       "surface": {
         "domain": "jup.ag", "prompt": "Swap 0.5 SOL → USDC",
         "instructions": [
@@ -139,10 +139,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.5 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": 74.5 } ], "delegates": [ { "account": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "delegate": "DrA1nMkQ7vXcP4tYzB9nLs2wEfG6hJkR8uVaN3iZ5pWo", "amount": "unlimited" } ], "authorities": [] },
-      "truth": "scam", "lesson": "域名对 ≠ 交易对。前端被投毒（DNS 劫持、恶意依赖、浏览器插件）时域名检查全绿，最后一道防线永远是指令本身：Jupiter 的 SOL→USDC 兑换不需要你授权 USDC。"
+      "truth": "scam", "lesson": "Right domain ≠ right transaction. When the frontend is poisoned (DNS hijack, malicious dependency, browser extension) the domain check is all green; the last line of defense is always the instructions themselves: a Jupiter SOL→USDC swap never needs you to approve USDC."
     },
     {
-      "id": "q10", "case": ["G2", "A10"], "title": "买入 MOON 代币",
+      "id": "q10", "case": ["G2", "A10"], "title": "Buy MOON token",
       "surface": {
         "domain": "raydium.io", "prompt": "Swap 200 USDC → 1,000,000 MOON",
         "instructions": [
@@ -153,10 +153,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.0021 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": -200 }, { "mint": "HnPtMint7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7Mq", "symbol": "MOON", "pre": 0, "delta": 1000000 } ], "delegates": [], "authorities": [] },
-      "truth": "scam", "lesson": "交易本身完全正常，坑在买到的资产：MOON 的冻结权限和 permanentDelegate 都是一个热钱包，发行方随时能冻住你的账户或把币划走。买币前查 mint，不只查交易。"
+      "truth": "scam", "lesson": "The transaction itself is completely normal; the trap is the asset you buy. MOON's freeze authority and permanentDelegate are both a hot wallet, so the issuer can freeze your account or pull the tokens at any time. Check the mint before buying, not just the transaction."
     },
     {
-      "id": "q11", "case": ["C9", "A1", "A3", "B3"], "title": "免费 mint 通行证",
+      "id": "q11", "case": ["C9", "A1", "A3", "B3"], "title": "Free mint pass",
       "surface": {
         "domain": "free-mint-pass.xyz", "prompt": "Mint your free pass",
         "balances": { "sol": 8.0, "tokens": { "USDC": 1500, "wSOL": 8.2, "Mad Lads #1234": 1 } },
@@ -168,7 +168,7 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -7.9 }, "tokens": [ { "mint": "So11111111111111111111111111111111111111112", "symbol": "wSOL", "pre": 8.2, "delta": -8.2 } ], "delegates": [ { "account": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "delegate": "DrA1nMkQ7vXcP4tYzB9nLs2wEfG6hJkR8uVaN3iZ5pWo", "amount": "unlimited" } ], "authorities": [ { "account": "UsrNftAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7M", "type": "AccountOwner", "from": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "to": "AtKr9zPq3vW7mXbN2cL5jYdH8sF4gTeR6uKaV1nZ8iQx" } ] },
-      "truth": "scam", "lesson": "真实 drainer 就是这样一锅端：授权、转账、改所有权、关账户塞在一笔里。“免费”的东西要四条指令是不对的。"
+      "truth": "scam", "lesson": "This is how a real drainer takes everything at once: approve, transfer, change ownership, and close account crammed into one transaction. Something “free” should not need four instructions."
     },
     {
       "id": "q12", "case": ["F5"], "title": "Mint DegenApe",
@@ -178,11 +178,11 @@
           { "program": "11111111111111111111111111111111", "programLabel": "System", "type": "Transfer", "label": "Mint", "accounts": { "from": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "to": "DappTreasury7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV" }, "args": { "lamports": 2000000000, "uiAmount": 2.0, "symbol": "SOL" } }
         ]
       },
-      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -2.0 }, "tokens": [], "delegates": [], "authorities": [], "notes": "只有 SOL 流出，没有任何资产流入" },
-      "truth": "scam", "lesson": "mint 一定有 mint 指令（Candy Machine、Token Metadata 之类的程序调用）。只有一条转账到普通地址，就是付钱不发货。"
+      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -2.0 }, "tokens": [], "delegates": [], "authorities": [], "notes": "Only SOL flows out; no asset flows in" },
+      "truth": "scam", "lesson": "A mint always has a mint instruction (a call to a program like Candy Machine or Token Metadata). A single transfer to a plain address is paying without receiving."
     },
     {
-      "id": "q13", "case": ["A6"], "title": "迁移质押到高收益验证者",
+      "id": "q13", "case": ["A6"], "title": "Migrate stake to a high-yield validator",
       "surface": {
         "domain": "solana-restake.app", "prompt": "Migrate your stake to a 9.2% APY validator",
         "instructions": [
@@ -190,10 +190,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.000005 }, "tokens": [], "delegates": [], "authorities": [ { "account": "UsrStake7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7Mq", "type": "Withdrawer", "from": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "to": "AtKr9zPq3vW7mXbN2cL5jYdH8sF4gTeR6uKaV1nZ8iQx" } ] },
-      "truth": "scam", "lesson": "换验证者用的是 Delegate / Deactivate，不会改 Withdrawer。Withdrawer 权限给了谁，质押的 SOL 就是谁的。"
+      "truth": "scam", "lesson": "Switching validators uses Delegate / Deactivate; it never changes the Withdrawer. Whoever holds the Withdrawer authority owns the staked SOL."
     },
     {
-      "id": "q14", "case": ["D2", "E3"], "title": "Jupiter 兑换（子域名）",
+      "id": "q14", "case": ["D2", "E3"], "title": "Jupiter swap (subdomain)",
       "surface": {
         "domain": "jup.ag.swap-app.com", "prompt": "Swap 1 SOL → USDC", "walletSimulation": "failed",
         "instructions": [
@@ -202,11 +202,11 @@
           { "program": "JUP6Lkb7fakeQ9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV", "programLabel": "Jupiter Aggregator v6", "type": "Route", "accounts": { "userSource": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "userDestination": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7" }, "args": { "inAmount": 1.0, "inSymbol": "SOL", "minOut": 148.0, "outSymbol": "USDC", "outMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "hops": 1 } }
         ]
       },
-      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -1.0 }, "tokens": [], "delegates": [], "authorities": [], "notes": "SOL 流出，没有 USDC 流入" },
-      "truth": "scam", "lesson": "两个仿冒叠在一起：域名开头是 jup.ag 但根域名是 swap-app.com；程序 ID 前 7 位和 Jupiter 一样但后面不同。程序 ID 要整串比对。"
+      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -1.0 }, "tokens": [], "delegates": [], "authorities": [], "notes": "SOL flows out; no USDC flows in" },
+      "truth": "scam", "lesson": "Two lookalikes stacked: the domain starts with jup.ag but the root domain is swap-app.com; the program ID shares its first 7 characters with Jupiter but differs after that. Compare program IDs in full."
     },
     {
-      "id": "q15", "case": ["B3", "E1"], "title": "Orca 兑换 100 USDC",
+      "id": "q15", "case": ["B3", "E1"], "title": "Orca swap 100 USDC",
       "surface": {
         "domain": "orca-swap.finance", "prompt": "Swap 100 USDC → SOL",
         "balances": { "sol": 5.0, "tokens": { "USDC": 1500 } },
@@ -218,10 +218,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 5.0, "delta": -4.24 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": -100 } ], "delegates": [], "authorities": [] },
-      "truth": "scam", "lesson": "Orca 程序是真的，夹带的那条“network fee”是假的：网络费不走 Transfer 指令，而且 4.9 SOL 是你余额的 98%。"
+      "truth": "scam", "lesson": "The Orca program is real; the smuggled “network fee” is fake. Network fees never go through a Transfer instruction, and 4.9 SOL is 98% of your balance."
     },
     {
-      "id": "q16", "case": ["G7", "J3"], "title": "Raydium 兑换 100 USDC → RAY",
+      "id": "q16", "case": ["G7", "J3"], "title": "Raydium swap 100 USDC → RAY",
       "surface": {
         "domain": "raydium.io", "prompt": "Swap 100 USDC → RAY",
         "instructions": [
@@ -233,10 +233,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.0003 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": -100 }, { "mint": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R", "symbol": "RAY", "pre": 0, "delta": 39.1 } ], "delegates": [], "authorities": [] },
-      "truth": "safe", "lesson": "有 Approve 不等于危险：额度刚好等于交易额、delegate 是 Raydium 的程序 authority、交易结尾还有 Revoke，这是老式 AMM 的标准写法。"
+      "truth": "safe", "lesson": "An Approve is not automatically dangerous: the amount equals the trade exactly, the delegate is Raydium's program authority, and the transaction ends with a Revoke. This is the standard pattern for older AMMs."
     },
     {
-      "id": "q17", "case": ["F4"], "title": "清理 3 个垃圾 NFT",
+      "id": "q17", "case": ["F4"], "title": "Clean up 3 spam NFTs",
       "surface": {
         "domain": "sol-incinerator.com", "prompt": "Burn 3 spam NFTs and reclaim 0.006 SOL rent",
         "instructions": [
@@ -249,20 +249,20 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": 0.006 }, "tokens": [], "delegates": [], "authorities": [] },
-      "truth": "safe", "lesson": "Burn 和 CloseAccount 两个词都吓人，但烧的是垃圾、租金退回你自己。判断 CloseAccount 只看一件事：destination 是不是你。"
+      "truth": "safe", "lesson": "Burn and CloseAccount both sound scary, but what burns is spam and the rent refunds to you. Judging a CloseAccount comes down to one thing: is the destination you."
     },
     {
-      "id": "q18", "case": ["C7", "E5"], "title": "登录 Drift",
+      "id": "q18", "case": ["C7", "E5"], "title": "Sign in to Drift",
       "surface": {
         "domain": "app.drift.trade", "prompt": "Sign in to Drift", "signMode": "message",
         "message": { "type": "siws", "domain": "app.drift.trade", "address": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "statement": "Sign in to Drift", "nonce": "k9f3a2", "issuedAt": "2026-09-30T08:00:00Z" },
         "instructions": []
       },
-      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": 0 }, "tokens": [], "delegates": [], "authorities": [], "notes": "明文消息，不是交易，没有余额变化" },
-      "truth": "safe", "lesson": "SIWS 明文登录是无害的：消息不是交易，签了也上不了链。要核对的只有消息里的 domain 和页面 domain 是否一致。"
+      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": 0 }, "tokens": [], "delegates": [], "authorities": [], "notes": "Plaintext message, not a transaction; no balance changes" },
+      "truth": "safe", "lesson": "SIWS plaintext sign-in is harmless: the message is not a transaction and cannot land on-chain even when signed. The only thing to check is that the domain in the message matches the page's domain."
     },
     {
-      "id": "q19", "case": ["B6", "I3"], "title": "给 Binance 充值 200 USDC",
+      "id": "q19", "case": ["B6", "I3"], "title": "Deposit 200 USDC to Binance",
       "surface": {
         "domain": null, "prompt": "Send 200 USDC to Binance",
         "instructions": [
@@ -271,10 +271,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.00204 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": -200 } ], "delegates": [], "authorities": [] },
-      "truth": "safe", "lesson": "多出来的 CreateAssociatedTokenAccount 和 0.002 SOL 是给收款方建 USDC 账户的租金，收款方整串地址和通讯录一致。"
+      "truth": "safe", "lesson": "The extra CreateAssociatedTokenAccount and 0.002 SOL are rent for creating the recipient's USDC account; the recipient's full address matches your address book."
     },
     {
-      "id": "q20", "case": ["A9", "E1"], "title": "一键撤销所有授权",
+      "id": "q20", "case": ["A9", "E1"], "title": "Revoke all approvals in one click",
       "surface": {
         "domain": "revoke-cash-sol.com", "prompt": "Revoke all token approvals",
         "instructions": [
@@ -282,32 +282,32 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.000005 }, "tokens": [], "delegates": [ { "account": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "delegate": "DrA1nMkQ7vXcP4tYzB9nLs2wEfG6hJkR8uVaN3iZ5pWo", "amount": "unlimited" } ], "authorities": [] },
-      "truth": "scam", "lesson": "按钮叫 Revoke，指令类型是 ApproveChecked。真正的撤销是 Revoke 指令，没有 delegate、没有数额。"
+      "truth": "scam", "lesson": "The button says Revoke; the instruction type is ApproveChecked. A real revoke is a Revoke instruction, with no delegate and no amount."
     },
     {
-      "id": "q21", "case": ["J3"], "title": "撤销 USDC 授权",
+      "id": "q21", "case": ["J3"], "title": "Revoke USDC approval",
       "surface": {
         "domain": null, "prompt": "Revoke USDC approval (delegate 5Q544fKr…)",
         "instructions": [
           { "program": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA", "programLabel": "SPL Token", "type": "Revoke", "accounts": { "source": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "owner": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t" } }
         ]
       },
-      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.000005 }, "tokens": [], "delegates": [], "authorities": [], "notes": "delegate 被清空" },
-      "truth": "safe", "lesson": "和上一类题的区别只在指令类型：Revoke 只有 source 和 owner 两个账户，不可能把钱给任何人。"
+      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.000005 }, "tokens": [], "delegates": [], "authorities": [], "notes": "delegate cleared" },
+      "truth": "safe", "lesson": "The only difference from the previous kind of question is the instruction type: Revoke has just two accounts, source and owner, so it cannot give money to anyone."
     },
     {
-      "id": "q22", "case": ["C2"], "title": "签名消息验证",
+      "id": "q22", "case": ["C2"], "title": "Sign message to verify",
       "surface": {
         "domain": "wallet-verify-center.com", "prompt": "Sign this message to verify you own the wallet", "signMode": "message",
-        "message": { "type": "raw", "bytesHex": "010001033a7f…(长度 215 字节)", "looksLikeTransaction": true, "decoded": "1 个签名者、1 条指令：System Transfer 12.4 SOL → DrB2nKpR8wYdQ5uZaC3mMt4xFgH7jLkS9vWbP4oA6qXe" },
+        "message": { "type": "raw", "bytesHex": "010001033a7f…(215 bytes)", "looksLikeTransaction": true, "decoded": "1 signer, 1 instruction: System Transfer 12.4 SOL → DrB2nKpR8wYdQ5uZaC3mMt4xFgH7jLkS9vWbP4oA6qXe" },
         "balances": { "sol": 12.5, "tokens": { "USDC": 1500 } },
         "instructions": []
       },
-      "simulation": { "ok": true, "sol": { "pre": 12.5, "delta": -12.4 }, "tokens": [], "delegates": [], "authorities": [], "notes": "把“消息”字节当作交易模拟：12.4 SOL 转出" },
-      "truth": "scam", "lesson": "签消息本来无害，前提是它真的是消息。能反序列化成交易的字节，签名就是交易签名。正规登录用 SIWS 明文。"
+      "simulation": { "ok": true, "sol": { "pre": 12.5, "delta": -12.4 }, "tokens": [], "delegates": [], "authorities": [], "notes": "Simulating the “message” bytes as a transaction: 12.4 SOL leaves" },
+      "truth": "scam", "lesson": "Signing a message is harmless, provided it really is a message. If the bytes deserialize into a transaction, your signature is a transaction signature. Legitimate sign-in uses SIWS plaintext."
     },
     {
-      "id": "q23", "case": ["D6", "G5"], "title": "Jupiter 兑换 10 SOL（滑点）",
+      "id": "q23", "case": ["D6", "G5"], "title": "Jupiter swap 10 SOL (slippage)",
       "surface": {
         "domain": "jup.ag", "prompt": "Swap 10 SOL → USDC",
         "balances": { "sol": 12.0, "tokens": { "USDC": 1500 } },
@@ -317,8 +317,8 @@
           { "program": "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4", "programLabel": "Jupiter Aggregator v6", "type": "Route", "accounts": { "userSource": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "userDestination": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7" }, "args": { "inAmount": 10.0, "inSymbol": "SOL", "minOut": 0, "outSymbol": "USDC", "outMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "hops": 2 } }
         ]
       },
-      "simulation": { "ok": true, "sol": { "pre": 12.0, "delta": -10.0 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": 1470 } ], "delegates": [], "authorities": [], "notes": "模拟里没有三明治机器人，所以看起来能拿到 1470 USDC；上链时 minOut = 0 意味着拿到 0 也算成功" },
-      "truth": "scam", "lesson": "程序对、域名对、模拟也对，只有 minOut = 0 不对。这是被篡改的前端或浏览器插件；滑点参数是你唯一的保护。"
+      "simulation": { "ok": true, "sol": { "pre": 12.0, "delta": -10.0 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": 1470 } ], "delegates": [], "authorities": [], "notes": "There are no sandwich bots in simulation, so it looks like you get 1470 USDC; on-chain, minOut = 0 means receiving 0 still counts as success" },
+      "truth": "scam", "lesson": "Right program, right domain, simulation looks right too; only minOut = 0 is wrong. This is a tampered frontend or browser extension; the slippage parameter is your only protection."
     },
     {
       "id": "q24", "case": ["F6"], "title": "Mint Okay Bear",
@@ -331,10 +331,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -1.0025 }, "tokens": [ { "mint": "OkayBearNew7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "symbol": "Okay Bear #7", "pre": 0, "delta": 1 } ], "delegates": [], "authorities": [] },
-      "truth": "scam", "lesson": "页面写 0.1 SOL，指令里是 1.0 SOL。把文案里的数字和交易里的数字对一下，只差一个小数点。"
+      "truth": "scam", "lesson": "The page says 0.1 SOL; the instruction says 1.0 SOL. Compare the number in the copy with the number in the transaction; it is off by one decimal point."
     },
     {
-      "id": "q25", "case": ["D3"], "title": "Marinade 质押 5 SOL",
+      "id": "q25", "case": ["D3"], "title": "Marinade stake 5 SOL",
       "surface": {
         "domain": "marinade.finance", "prompt": "Stake 5 SOL → mSOL",
         "instructions": [
@@ -344,23 +344,23 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -5.002 }, "tokens": [ { "mint": "mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So", "symbol": "mSOL", "pre": 0, "delta": 4.21 } ], "delegates": [], "authorities": [] },
-      "truth": "safe", "lesson": "程序体检会显示 Marinade 是可升级程序。可升级不是红旗，升级权限是热钱包才是；这里是多签。"
+      "truth": "safe", "lesson": "The program check shows Marinade is upgradeable. Upgradeable is not a red flag; a hot wallet as upgrade authority is. Here it is a multisig."
     },
     {
-      "id": "q26", "case": ["J2", "H3", "I3"], "title": "给 Alice 转 0.5 SOL 房租",
+      "id": "q26", "case": ["J2", "H3", "I3"], "title": "Send Alice 0.5 SOL rent",
       "surface": {
         "domain": null, "prompt": "Send 0.5 SOL to Alice",
         "instructions": [
           { "program": "ComputeBudget111111111111111111111111111111", "programLabel": "Compute Budget", "type": "SetComputeUnitPrice", "args": { "microLamports": 200 } },
           { "program": "11111111111111111111111111111111", "programLabel": "System", "type": "Transfer", "accounts": { "from": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "to": "7xKXm4RtQ9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7MqS" }, "args": { "lamports": 500000000, "uiAmount": 0.5, "symbol": "SOL" } },
-          { "program": "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr", "programLabel": "Memo", "type": "Memo", "args": { "text": "9 月房租" } }
+          { "program": "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr", "programLabel": "Memo", "type": "Memo", "args": { "text": "September rent" } }
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.500005 }, "tokens": [], "delegates": [], "authorities": [] },
-      "truth": "safe", "lesson": "Memo 和 Compute Budget 是最常见的两个“陌生程序”，都不碰资产。收款地址整串和通讯录一致。"
+      "truth": "safe", "lesson": "Memo and Compute Budget are the two most common “unfamiliar programs”, and neither touches assets. The recipient's full address matches your address book."
     },
     {
-      "id": "q27", "case": ["J1", "C5"], "title": "Jupiter 兑换 2 SOL（模拟失败）",
+      "id": "q27", "case": ["J1", "C5"], "title": "Jupiter swap 2 SOL (simulation failed)",
       "surface": {
         "domain": "jup.ag", "prompt": "Swap 2 SOL → USDC", "walletSimulation": "failed",
         "instructions": [
@@ -373,11 +373,11 @@
           { "program": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA", "programLabel": "SPL Token", "type": "CloseAccount", "accounts": { "account": "UsrWso1Ata7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "destination": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "owner": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t" } }
         ]
       },
-      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -2.0003 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": 298.2 } ], "delegates": [], "authorities": [], "notes": "钱包那次模拟失败是区块哈希过期；重新模拟正常" },
-      "truth": "safe", "lesson": "钱包模拟失败只是“看不见”，不是“有问题”。指令逐条正常时，重新模拟一次就够了，不要因为一个红色提示就否掉一笔正常交易。"
+      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -2.0003 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": 298.2 } ], "delegates": [], "authorities": [], "notes": "The wallet's simulation failed on an expired blockhash; re-simulation is normal" },
+      "truth": "safe", "lesson": "A failed wallet simulation means “cannot see”, not “something is wrong”. When every instruction checks out, one re-simulation is enough; do not reject a normal transaction over a single red warning."
     },
     {
-      "id": "q28", "case": ["A2"], "title": "上架 Mad Lads 出售",
+      "id": "q28", "case": ["A2"], "title": "List Mad Lads for sale",
       "surface": {
         "domain": "nft-marketplace-lite.xyz", "prompt": "List Mad Lads #1234 for 95 SOL",
         "instructions": [
@@ -385,10 +385,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.000005 }, "tokens": [], "delegates": [ { "account": "UsrNftAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7M", "mint": "NftMintMadLads7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN", "symbol": "Mad Lads #1234", "delegate": "NftMktLiteEscrow7Q9vB2nLpZc6YdW8fHsJ3aGkE5uT", "amount": "1" } ], "authorities": [] },
-      "truth": "scam", "lesson": "额度只有 1，看起来克制，但 delegate 是一个普通钱包，不是市场程序的 PDA。正规市场把 NFT 委托给程序 authority，钱包地址拿到委托就能直接转走。"
+      "truth": "scam", "lesson": "An amount of just 1 looks restrained, but the delegate is a plain wallet, not the marketplace program's PDA. Legitimate marketplaces delegate the NFT to a program authority; a wallet address holding the delegation can transfer it away directly."
     },
     {
-      "id": "q29", "case": ["F3"], "title": "烧掉垃圾 NFT 领 50 USDC",
+      "id": "q29", "case": ["F3"], "title": "Burn spam NFT to claim 50 USDC",
       "surface": {
         "domain": "burn2earn-sol.xyz", "prompt": "Burn your spam NFT to claim 50 USDC reward",
         "instructions": [
@@ -397,10 +397,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.000005 }, "tokens": [], "delegates": [], "authorities": [ { "account": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "type": "AccountOwner", "from": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "to": "AtKr9zPq3vW7mXbN2cL5jYdH8sF4gTeR6uKaV1nZ8iQx" } ] },
-      "truth": "scam", "lesson": "第一条 Burn 是真的、无害的，它的作用是让你觉得“这就是清理垃圾”。第二条把你 USDC 账户的所有权给了别人。看完最后一条指令再签。"
+      "truth": "scam", "lesson": "The first Burn is real and harmless; its job is to make you think “this is just cleanup”. The second instruction hands ownership of your USDC account to someone else. Read through the last instruction before signing."
     },
     {
-      "id": "q30", "case": ["E2"], "title": "Jupiter 兑换 1 SOL（同形字域名）",
+      "id": "q30", "case": ["E2"], "title": "Jupiter swap 1 SOL (homoglyph domain)",
       "surface": {
         "domain": "jυp.ag", "prompt": "Swap 1 SOL → USDC",
         "instructions": [
@@ -411,22 +411,22 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -1.0 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": 148.9 } ], "delegates": [ { "account": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "delegate": "DrA1nMkQ7vXcP4tYzB9nLs2wEfG6hJkR8uVaN3iZ5pWo", "amount": "unlimited" } ], "authorities": [] },
-      "truth": "scam", "lesson": "域名第二个字母是希腊字母 υ，肉眼看不出。程序检查域名里有没有非 ASCII 字符是免费的；人只能靠书签。"
+      "truth": "scam", "lesson": "The second letter of the domain is the Greek letter υ, invisible to the eye. Checking a domain for non-ASCII characters is free for a program; a human can only rely on bookmarks."
     },
     {
-      "id": "q31", "case": ["D4", "D1"], "title": "存入收益金库",
+      "id": "q31", "case": ["D4", "D1"], "title": "Deposit into yield vault",
       "surface": {
         "domain": "sol-yield-optimizer.xyz", "prompt": "Deposit 1,000 USDC into Vault v2 (12% APY)",
         "instructions": [
           { "program": "ComputeBudget111111111111111111111111111111", "programLabel": "Compute Budget", "type": "SetComputeUnitPrice", "args": { "microLamports": 1000 } },
-          { "program": "UnKnwnPrg4Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7M", "programLabel": "Vault v2", "type": "Unknown", "label": "Deposit", "accounts": { "user": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "userUsdc": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "vault": "VaultAcct7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7Mq", "tokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" }, "args": { "data": "0x9a2f…(8 字节 discriminator + 8 字节数额)" } }
+          { "program": "UnKnwnPrg4Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7M", "programLabel": "Vault v2", "type": "Unknown", "label": "Deposit", "accounts": { "user": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t", "userUsdc": "UsrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "vault": "VaultAcct7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7Mq", "tokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" }, "args": { "data": "0x9a2f…(8-byte discriminator + 8-byte amount)" } }
         ]
       },
-      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.000005 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": -1000 } ], "delegates": [], "authorities": [], "notes": "内部 CPI：SPL Token TransferChecked 1000 USDC → AtKrUsdcAta…（权限收集者的账户），没有任何凭证代币流入" },
-      "truth": "scam", "lesson": "指令列表干干净净，只有一次“程序调用”。转账在程序内部的 CPI 里完成，弹窗看不到；模拟能看到 USDC 少了 1000、什么都没进来。金库存款一定有份额代币流入。"
+      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.000005 }, "tokens": [ { "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "symbol": "USDC", "pre": 1500, "delta": -1000 } ], "delegates": [], "authorities": [], "notes": "Inner CPI: SPL Token TransferChecked 1000 USDC → AtKrUsdcAta… (the authority collector's account); no receipt token flows in" },
+      "truth": "scam", "lesson": "The instruction list is spotless: just one “program call”. The transfer happens inside the program via CPI, invisible in the popup; simulation shows 1000 USDC gone and nothing coming in. A vault deposit always has share tokens flowing in."
     },
     {
-      "id": "q32", "case": ["G1"], "title": "Jupiter 兑换 1 SOL → “USDC”",
+      "id": "q32", "case": ["G1"], "title": "Jupiter swap 1 SOL → “USDC”",
       "surface": {
         "domain": "jupiter-swap.pro", "prompt": "Swap 1 SOL → USDC",
         "instructions": [
@@ -437,10 +437,10 @@
         ]
       },
       "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -1.0021 }, "tokens": [ { "mint": "FakeUsdcMint7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1o", "symbol": "USDC", "pre": 0, "delta": 148.9 } ], "delegates": [], "authorities": [] },
-      "truth": "scam", "lesson": "Jupiter 程序是真的，它什么代币都能路由。收到的 “USDC” 是另一个 mint，符号可以随便叫；官方 USDC 的 mint 只有一个（EPjF…Dt1v）。"
+      "truth": "scam", "lesson": "The Jupiter program is real, and it will route any token. The “USDC” you receive is a different mint; a symbol can be anything. Official USDC has exactly one mint (EPjF…Dt1v)."
     },
     {
-      "id": "q33", "case": ["D3"], "title": "Marinade 延迟解押 4.2 mSOL",
+      "id": "q33", "case": ["D3"], "title": "Marinade delayed unstake 4.2 mSOL",
       "surface": {
         "domain": "marinade.finance", "prompt": "Unstake 4.2 mSOL (delayed, ~2 epochs)",
         "instructions": [
@@ -449,8 +449,8 @@
           { "program": "MarBmsSgKXdrN1egZf5sqe1TMai9K1rChYNDJgjq7aD", "programLabel": "Marinade Finance", "type": "OrderUnstake", "accounts": { "burnFrom": "UsrMso1Ata7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7", "ticket": "TicketAcct7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7Mq" }, "args": { "inAmount": 4.2, "inSymbol": "mSOL", "outSymbol": "SOL", "minOut": 4.98 } }
         ]
       },
-      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.0016 }, "tokens": [ { "mint": "mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So", "symbol": "mSOL", "pre": 4.21, "delta": -4.2 } ], "delegates": [], "authorities": [], "notes": "创建了一张 ticket 账户（owner 是 Marinade 程序），2 个 epoch 后可领取 4.98 SOL" },
-      "truth": "safe", "lesson": "延迟解押先烧 mSOL、再给你一张 ticket，SOL 要两个 epoch 后才到。模拟里“只出不进”是正常的：ticket 账户就是凭证，owner 是 Marinade 程序而不是某个钱包。"
+      "simulation": { "ok": true, "sol": { "pre": 8.0, "delta": -0.0016 }, "tokens": [ { "mint": "mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So", "symbol": "mSOL", "pre": 4.21, "delta": -4.2 } ], "delegates": [], "authorities": [], "notes": "Created a ticket account (owner is the Marinade program); 4.98 SOL can be claimed after 2 epochs" },
+      "truth": "safe", "lesson": "Delayed unstake burns the mSOL first and gives you a ticket; the SOL arrives two epochs later. “Out but nothing in” is normal in simulation: the ticket account is the receipt, and its owner is the Marinade program, not some wallet."
     }
   ]
 }

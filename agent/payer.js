@@ -1,7 +1,7 @@
-// 付款适配器：拿到 402 报价，返回 X-Payment 头的值。
-//   mock   ：把 nonce / 金额 / 付款人打包，服务端只核对 nonce。
-//   solana ：真的在 devnet 转一笔 SOL，把签名当 proof。未验证（见 server/live.js）。
-// 以后换成 x402：这个文件整个换成 @x402/fetch 的 wrapFetchWithPayment，agent/loop.js 的 buy() 不用改。
+// Payment adapter: takes a 402 quote and returns the value of the X-Payment header.
+//   mock   : packs the nonce / amount / payer; the server only checks the nonce.
+//   solana : really transfers SOL on devnet and uses the signature as the proof. Untested (see server/live.js).
+// To switch to x402 later: replace this whole file with @x402/fetch's wrapFetchWithPayment; buy() in agent/loop.js stays as is.
 import { sendSolTransfer } from '../server/live.js';
 
 export function createPayer({ scheme = 'mock', address = 'AgentMockPayer1111111111111111111111111111', keypairSecret, rpc } = {}) {
