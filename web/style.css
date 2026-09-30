@@ -1,5 +1,6 @@
 :root { --bg:#0f1218; --panel:#171c26; --panel2:#1e2532; --text:#e8ecf3; --dim:#9aa4b5; --line:#2a3242; --red:#ff5d6c; --green:#3ddc97; --amber:#ffc857; --blue:#6ea8fe; --mono: ui-monospace, SFMono-Regular, Menlo, monospace; }
 * { box-sizing:border-box }
+[hidden] { display:none !important }
 body { margin:0; background:var(--bg); color:var(--text); font:15px/1.55 -apple-system, "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif; }
 a { color:var(--blue) }
 button { font:inherit; cursor:pointer; border:0; border-radius:10px; color:var(--text) }
