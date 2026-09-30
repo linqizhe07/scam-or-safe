@@ -1,0 +1,55 @@
+:root { --bg:#0f1218; --panel:#171c26; --panel2:#1e2532; --text:#e8ecf3; --dim:#9aa4b5; --line:#2a3242; --red:#ff5d6c; --green:#3ddc97; --amber:#ffc857; --blue:#6ea8fe; --mono: ui-monospace, SFMono-Regular, Menlo, monospace; }
+* { box-sizing:border-box }
+body { margin:0; background:var(--bg); color:var(--text); font:15px/1.55 -apple-system, "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif; }
+a { color:var(--blue) }
+button { font:inherit; cursor:pointer; border:0; border-radius:10px; color:var(--text) }
+button:disabled { opacity:.45; cursor:default }
+.ghost { background:var(--panel2); border:1px solid var(--line); padding:8px 14px }
+.ghost:hover:not(:disabled) { border-color:var(--blue) }
+
+.top { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 24px; border-bottom:1px solid var(--line); background:var(--panel); position:sticky; top:0; z-index:5; flex-wrap:wrap }
+.brand { font-size:22px; font-weight:800; letter-spacing:.5px } .brand .or { color:var(--dim); font-weight:400; margin:0 6px }
+.scores { display:flex; gap:20px; align-items:center; flex-wrap:wrap }
+.score { display:flex; flex-direction:column; min-width:80px } .score .who { font-size:11px; color:var(--dim); text-transform:uppercase; letter-spacing:.6px } .score b { font-size:18px }
+.score.budget { min-width:170px } .bar { height:5px; background:var(--line); border-radius:3px; margin-top:4px; overflow:hidden } .bar i { display:block; height:100%; width:0; background:var(--amber); transition:width .3s }
+
+main { display:grid; grid-template-columns: minmax(0, 1.4fr) minmax(320px, 1fr); gap:20px; padding:20px 24px; max-width:1300px; margin:0 auto }
+.card, .result, .agent { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:20px }
+.result { grid-column:1 } .agent { grid-column:2; grid-row:1 / span 2; align-self:start; position:sticky; top:80px; max-height:calc(100vh - 100px); overflow:auto }
+
+.card-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start }
+.eyebrow { color:var(--dim); font-size:13px } .domain { font-family:var(--mono); color:var(--blue) }
+h1 { margin:4px 0 6px; font-size:22px } .prompt { margin:0; color:var(--dim); font-style:italic }
+.timer { position:relative; width:56px; height:56px; flex:none } .timer svg { width:56px; height:56px; transform:rotate(-90deg) }
+.timer .track { fill:none; stroke:var(--line); stroke-width:4 } .timer .arc { fill:none; stroke:var(--amber); stroke-width:4; stroke-dasharray:106.8; stroke-dashoffset:0; transition:stroke-dashoffset 1s linear }
+.timer span { position:absolute; inset:0; display:grid; place-items:center; font-weight:700 }
+.chips { display:flex; gap:8px; flex-wrap:wrap; margin:14px 0 } .chip { font-size:12px; padding:3px 9px; border-radius:999px; background:var(--panel2); border:1px solid var(--line); color:var(--dim) } .chip.warn { border-color:var(--amber); color:var(--amber) }
+.wallet { background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:12px 14px }
+.wallet-head { font-size:12px; color:var(--dim); text-transform:uppercase; letter-spacing:.6px; margin-bottom:8px }
+.ix-list { margin:0; padding-left:22px; font-family:var(--mono); font-size:12.5px } .ix-list li { margin:6px 0; word-break:break-all } .ix-list .type { color:var(--text); font-weight:700 } .ix-list .prog { color:var(--blue) } .ix-list .label { color:var(--amber) } .ix-list .kv { color:var(--dim) } .ix-list .unres { color:var(--red) }
+.message { font-family:var(--mono); font-size:12.5px; white-space:pre-wrap; color:var(--dim) }
+.balances { margin-top:10px; font-size:12px; color:var(--dim) }
+.actions { display:flex; gap:14px; margin-top:18px } .big { flex:1; padding:16px; font-size:20px; font-weight:800; border-radius:14px }
+.scam { background:#3a1b22; border:2px solid var(--red); color:var(--red) } .scam:hover:not(:disabled) { background:var(--red); color:#fff }
+.safe { background:#163227; border:2px solid var(--green); color:var(--green) } .safe:hover:not(:disabled) { background:var(--green); color:#062 }
+.next { background:var(--blue); color:#061a3a }
+.card.answered .big.scam, .card.answered .big.safe { opacity:.5 }
+
+.result-head { display:flex; justify-content:space-between; align-items:center; gap:12px } .result h2 { margin:0; font-size:20px }
+.pill { font-size:12px; padding:4px 10px; border-radius:999px; border:1px solid var(--line) } .pill.scam { color:var(--red); border-color:var(--red) } .pill.safe { color:var(--green); border-color:var(--green) }
+.section { margin-top:14px } .section h3 { margin:0 0 8px; font-size:14px; color:var(--dim) }
+.finding { border-left:3px solid var(--line); padding:8px 12px; margin:8px 0; background:var(--panel2); border-radius:0 10px 10px 0 }
+.finding.high { border-color:var(--red) } .finding.medium { border-color:var(--amber) } .finding.low { border-color:var(--dim) } .finding.green { border-color:var(--green) }
+.finding b { display:block } .finding .detail { color:var(--text); font-size:14px; margin:3px 0 } .finding .spot { font-size:12.5px; color:var(--dim) } .finding .ev { font-size:11px; color:var(--dim); font-family:var(--mono) }
+.lesson { margin-top:16px; padding:12px 14px; background:var(--panel2); border-radius:10px } .lesson b { color:var(--amber) } .lesson p { margin:4px 0 0 }
+.cases { margin-top:10px; font-size:13px; color:var(--dim) } .cases span { display:inline-block; margin:4px 8px 0 0; padding:2px 8px; border:1px solid var(--line); border-radius:6px }
+
+.agent-head { display:flex; justify-content:space-between; align-items:center } .agent h2 { margin:0; font-size:18px } .agent-sub { color:var(--dim); font-size:12.5px; margin:8px 0 12px }
+.steps { margin:0; padding:0; list-style:none } .steps li { padding:8px 10px; margin:6px 0; border-radius:10px; background:var(--panel2); font-size:13.5px; border-left:3px solid var(--line); animation:in .25s ease }
+.steps li.free, .steps li.update { border-color:var(--blue) } .steps li.decide { border-color:var(--amber) } .steps li.bought { border-color:var(--green) } .steps li.refused, .steps li.error { border-color:var(--red) } .steps li.answer { border-color:var(--text); font-weight:700 }
+.steps .t { font-size:11px; color:var(--dim); font-family:var(--mono); margin-right:6px }
+@keyframes in { from { opacity:0; transform:translateY(4px) } to { opacity:1; transform:none } }
+.ledger { margin-top:16px } .ledger-head { font-size:12px; color:var(--dim); text-transform:uppercase; letter-spacing:.6px; margin-bottom:6px }
+table { width:100%; border-collapse:collapse; font-size:12px } th, td { text-align:left; padding:5px 6px; border-bottom:1px solid var(--line); vertical-align:top } th { color:var(--dim); font-weight:500 } td.settled { color:var(--green) } td.refused { color:var(--red) } td.failed { color:var(--amber) }
+footer { text-align:center; color:var(--dim); font-size:12px; padding:20px }
+@media (max-width: 900px) { main { grid-template-columns:1fr } .agent { grid-column:1; grid-row:auto; position:static; max-height:none } .result { grid-column:1 } }

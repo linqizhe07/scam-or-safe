@@ -1,0 +1,21 @@
+{
+  "name": "scam-or-safe",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Scam or Safe：Solana 交易识别游戏。人 vs agent，agent 在预算内花钱买检查；判错后由识别器解释为什么。",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "agent": "node agent/cli.js",
+    "coverage": "node scripts/coverage.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "optionalDependencies": {
+    "@solana/web3.js": "^1.98.0"
+  }
+}

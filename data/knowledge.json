@@ -1,0 +1,380 @@
+{
+  "_readme": "四条付费检查查的“地面事实”。除了真实的程序 ID / mint（System、Token、Jupiter、Marinade、Raydium、Orca、Candy Machine、USDC、mSOL、RAY、wSOL），其余地址全是虚构的，用来出题。LIVE=1 时知识库里没有的地址 / 程序会去 devnet 查（server/live.js，未验证）。",
+  "user": "HgQ3iN8ZEk7A9YwvUuJ2mR4TsF6bLdKcVpXqW1eGnS5t",
+  "addresses": {
+    "DrA1nMkQ7vXcP4tYzB9nLs2wEfG6hJkR8uVaN3iZ5pWo": {
+      "label": "已知 drainer",
+      "reputation": "drainer",
+      "firstSeenDaysAgo": 40,
+      "notes": "被 300+ 个钱包举报；累计 120 万 USDC 流入后转到混币服务"
+    },
+    "DrB2nKpR8wYdQ5uZaC3mMt4xFgH7jLkS9vWbP4oA6qXe": {
+      "label": "新 drainer",
+      "reputation": "drainer",
+      "firstSeenDaysAgo": 3,
+      "notes": "48 小时内收到 41 笔 SOL 转入，全部立即转出"
+    },
+    "AtKr9zPq3vW7mXbN2cL5jYdH8sF4gTeR6uKaV1nZ8iQx": {
+      "label": "权限收集者",
+      "reputation": "scam",
+      "firstSeenDaysAgo": 12,
+      "notes": "名下有 87 个被改过所有权 / 关闭权限的代币账户和 14 个被改过 withdrawer 的质押账户"
+    },
+    "AtKrUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV": {
+      "label": "权限收集者的 USDC 账户",
+      "reputation": "scam",
+      "firstSeenDaysAgo": 12,
+      "notes": "owner 是 AtKr9zPq…"
+    },
+    "7xKXjT2cP8yN5bQm4WvRz9sLaHdF6kGeU3nJ1iX7MqS": {
+      "label": "投毒地址",
+      "reputation": "poisoning",
+      "firstSeenDaysAgo": 2,
+      "notes": "48 小时内向 900 个地址发送 0 USDC 灰尘转账；与通讯录地址 7xKX…7MqS 前后 4 位相同"
+    },
+    "DappTreasury7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV": {
+      "label": "“mint”收款地址",
+      "reputation": "scam",
+      "firstSeenDaysAgo": 5,
+      "notes": "收到 2 SOL × 340 笔；链上没有发生过任何 mint"
+    },
+    "DappFeeSink7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7": {
+      "label": "“network fee”收款地址",
+      "reputation": "drainer",
+      "firstSeenDaysAgo": 8,
+      "notes": "每笔收款都是付款人 SOL 余额的 95% 以上"
+    },
+    "CndyTreasuryFake7Q9vB2nLpZc6YdW8fHsJ3aGkE5uT": {
+      "label": "假 mint 站收款地址",
+      "reputation": "scam",
+      "firstSeenDaysAgo": 6,
+      "notes": "页面标价 0.1 SOL，实际每笔收 1 SOL"
+    },
+    "7xKXm4RtQ9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7MqS": {
+      "label": "Alice",
+      "reputation": "known",
+      "firstSeenDaysAgo": 400,
+      "notes": "通讯录联系人；有 60 多笔往来"
+    },
+    "ExCh4ngeDepositAddr7Q9vB2nLpZc6YdW8fHsJ3aGkE": {
+      "label": "Binance 充值地址",
+      "reputation": "known",
+      "firstSeenDaysAgo": 900,
+      "notes": "交易所热钱包，日均数万笔转入"
+    },
+    "ExChUsdcAta7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7": {
+      "label": "Binance 充值地址的 USDC 账户",
+      "reputation": "known",
+      "firstSeenDaysAgo": 900,
+      "notes": "owner 是 ExCh4nge…"
+    },
+    "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1": {
+      "label": "Raydium AMM authority",
+      "reputation": "program",
+      "firstSeenDaysAgo": 1300,
+      "notes": "Raydium AMM v4 的 PDA，作为 delegate 出现是 swap 的标准写法"
+    },
+    "HtWaKeyQ7vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7MqSx": {
+      "label": "热钱包",
+      "reputation": "unknown",
+      "firstSeenDaysAgo": 2,
+      "notes": "是 UnKnwnPrg… 和 JUP6Lkb7fake… 两个程序的升级权限"
+    },
+    "NftMktLiteEscrow7Q9vB2nLpZc6YdW8fHsJ3aGkE5uT": {
+      "label": "自称“市场托管”",
+      "reputation": "scam",
+      "firstSeenDaysAgo": 6,
+      "notes": "普通钱包而非程序 PDA；名下 210 个被委托的 NFT 账户，已转走 63 个"
+    }
+  },
+  "programs": {
+    "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4": {
+      "kind": "program",
+      "name": "Jupiter Aggregator v6",
+      "verified": true,
+      "upgradeable": true,
+      "upgradeAuthorityKind": "multisig",
+      "deployedDaysAgo": 700
+    },
+    "MarBmsSgKXdrN1egZf5sqe1TMai9K1rChYNDJgjq7aD": {
+      "kind": "program",
+      "name": "Marinade Finance",
+      "verified": true,
+      "upgradeable": true,
+      "upgradeAuthorityKind": "multisig",
+      "deployedDaysAgo": 1200
+    },
+    "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8": {
+      "kind": "program",
+      "name": "Raydium AMM v4",
+      "verified": true,
+      "upgradeable": true,
+      "upgradeAuthorityKind": "multisig",
+      "deployedDaysAgo": 1300
+    },
+    "whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc": {
+      "kind": "program",
+      "name": "Orca Whirlpool",
+      "verified": true,
+      "upgradeable": true,
+      "upgradeAuthorityKind": "multisig",
+      "deployedDaysAgo": 1000
+    },
+    "CndyV3LdqHUfDLmE5naZjVN8rBZz4tqhdefbAnjHG3JR": {
+      "kind": "program",
+      "name": "Candy Machine v3 (Metaplex)",
+      "verified": true,
+      "upgradeable": true,
+      "upgradeAuthorityKind": "multisig",
+      "deployedDaysAgo": 800
+    },
+    "JUP6Lkb7fakeQ9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV": {
+      "kind": "program",
+      "name": "自称 Jupiter Aggregator v6",
+      "verified": false,
+      "upgradeable": true,
+      "upgradeAuthorityKind": "hot-wallet",
+      "upgradeAuthority": "HtWaKeyQ7vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7MqSx",
+      "deployedDaysAgo": 2,
+      "lookalikeOf": "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4"
+    },
+    "UnKnwnPrg4Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7M": {
+      "kind": "program",
+      "name": "未命名程序",
+      "verified": false,
+      "upgradeable": true,
+      "upgradeAuthorityKind": "hot-wallet",
+      "upgradeAuthority": "HtWaKeyQ7vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7MqSx",
+      "deployedDaysAgo": 3
+    },
+    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": {
+      "kind": "mint",
+      "symbol": "USDC",
+      "name": "USD Coin (Circle)",
+      "freezeAuthorityKind": "issuer",
+      "mintAuthorityKind": "issuer",
+      "extensions": [],
+      "ageDays": 1500,
+      "holders": 3000000,
+      "notes": "合规稳定币的 freeze / mint 权限属于发行方，是常态不是红旗"
+    },
+    "mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So": {
+      "kind": "mint",
+      "symbol": "mSOL",
+      "name": "Marinade staked SOL",
+      "freezeAuthorityKind": "none",
+      "mintAuthorityKind": "program",
+      "extensions": [],
+      "ageDays": 1200,
+      "holders": 200000
+    },
+    "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R": {
+      "kind": "mint",
+      "symbol": "RAY",
+      "name": "Raydium",
+      "freezeAuthorityKind": "none",
+      "mintAuthorityKind": "none",
+      "extensions": [],
+      "ageDays": 1300,
+      "holders": 500000
+    },
+    "So11111111111111111111111111111111111111112": {
+      "kind": "mint",
+      "symbol": "wSOL",
+      "name": "Wrapped SOL",
+      "freezeAuthorityKind": "none",
+      "mintAuthorityKind": "none",
+      "extensions": [],
+      "ageDays": 1600,
+      "holders": 5000000
+    },
+    "HnPtMint7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1oV7Mq": {
+      "kind": "mint",
+      "symbol": "MOON",
+      "name": "MOON",
+      "tokenProgram": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+      "freezeAuthorityKind": "hot-wallet",
+      "mintAuthorityKind": "hot-wallet",
+      "extensions": [
+        "permanentDelegate"
+      ],
+      "ageDays": 1,
+      "holders": 12,
+      "notes": "permanentDelegate 是热钱包 HtWaKey…；已冻结 4 个买家账户"
+    },
+    "FakeUsdcMint7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1o": {
+      "kind": "mint",
+      "symbol": "USDC",
+      "name": "USDC（假）",
+      "impersonates": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "freezeAuthorityKind": "hot-wallet",
+      "mintAuthorityKind": "hot-wallet",
+      "extensions": [],
+      "ageDays": 4,
+      "holders": 30
+    },
+    "NftMintMadLads7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN": {
+      "kind": "mint",
+      "symbol": "Mad Lads #1234",
+      "name": "Mad Lads #1234",
+      "freezeAuthorityKind": "none",
+      "mintAuthorityKind": "none",
+      "extensions": [],
+      "ageDays": 500,
+      "holders": 1,
+      "notes": "用户钱包里的 NFT，地板价约 90 SOL"
+    },
+    "SpamNftMintA7Q9vB2nLpZc6YdW8fHsJ3aGkE5uTiN1o": {
+      "kind": "mint",
+      "symbol": "FREE 5000 USDC",
+      "name": "空投垃圾 NFT",
+      "freezeAuthorityKind": "none",
+      "mintAuthorityKind": "none",
+      "extensions": [],
+      "ageDays": 2,
+      "holders": 12000,
+      "notes": "metadata 里带钓鱼链接"
+    }
+  },
+  "domains": {
+    "jup.ag": {
+      "known": true,
+      "officialOf": "Jupiter",
+      "registeredDaysAgo": 1400
+    },
+    "raydium.io": {
+      "known": true,
+      "officialOf": "Raydium",
+      "registeredDaysAgo": 1400
+    },
+    "marinade.finance": {
+      "known": true,
+      "officialOf": "Marinade",
+      "registeredDaysAgo": 1300
+    },
+    "app.drift.trade": {
+      "known": true,
+      "officialOf": "Drift",
+      "registeredDaysAgo": 1100
+    },
+    "sol-incinerator.com": {
+      "known": true,
+      "officialOf": "Sol Incinerator",
+      "registeredDaysAgo": 800
+    },
+    "jup-airdrop.xyz": {
+      "known": false,
+      "lookalikeOf": "jup.ag",
+      "lookalikeKind": "brand",
+      "registeredDaysAgo": 4
+    },
+    "magiceden-claim.net": {
+      "known": false,
+      "lookalikeOf": "magiceden.io",
+      "lookalikeKind": "brand",
+      "registeredDaysAgo": 6
+    },
+    "phantom-verify.app": {
+      "known": false,
+      "lookalikeOf": "phantom.app",
+      "lookalikeKind": "brand",
+      "registeredDaysAgo": 3
+    },
+    "gasless-claim.xyz": {
+      "known": false,
+      "registeredDaysAgo": 2
+    },
+    "solana-rewards.io": {
+      "known": false,
+      "registeredDaysAgo": 9
+    },
+    "snsdomains-register.xyz": {
+      "known": false,
+      "lookalikeOf": "sns.id",
+      "lookalikeKind": "brand",
+      "registeredDaysAgo": 5
+    },
+    "free-mint-pass.xyz": {
+      "known": false,
+      "registeredDaysAgo": 1
+    },
+    "degenape-mint.xyz": {
+      "known": false,
+      "registeredDaysAgo": 7
+    },
+    "solana-restake.app": {
+      "known": false,
+      "registeredDaysAgo": 4
+    },
+    "jup.ag.swap-app.com": {
+      "known": false,
+      "lookalikeOf": "jup.ag",
+      "lookalikeKind": "subdomain",
+      "registeredDaysAgo": 3,
+      "notes": "根域名是 swap-app.com"
+    },
+    "orca-swap.finance": {
+      "known": false,
+      "lookalikeOf": "orca.so",
+      "lookalikeKind": "brand",
+      "registeredDaysAgo": 8
+    },
+    "revoke-cash-sol.com": {
+      "known": false,
+      "lookalikeOf": "revoke.cash",
+      "lookalikeKind": "brand",
+      "registeredDaysAgo": 10
+    },
+    "wallet-verify-center.com": {
+      "known": false,
+      "registeredDaysAgo": 2
+    },
+    "nft-marketplace-lite.xyz": {
+      "known": false,
+      "registeredDaysAgo": 6
+    },
+    "jυp.ag": {
+      "known": false,
+      "lookalikeOf": "jup.ag",
+      "lookalikeKind": "homoglyph",
+      "registeredDaysAgo": 2,
+      "notes": "第二个字母是希腊字母 υ (U+03C5)，punycode xn--jp-8cd.ag"
+    },
+    "mint-okaybears.xyz": {
+      "known": false,
+      "lookalikeOf": "okaybears.com",
+      "lookalikeKind": "brand",
+      "registeredDaysAgo": 4
+    },
+    "burn2earn-sol.xyz": {
+      "known": false,
+      "registeredDaysAgo": 3
+    },
+    "sol-yield-optimizer.xyz": {
+      "known": false,
+      "registeredDaysAgo": 3
+    },
+    "jupiter-swap.pro": {
+      "known": false,
+      "lookalikeOf": "jup.ag",
+      "lookalikeKind": "brand",
+      "registeredDaysAgo": 5
+    }
+  },
+  "knownDomains": [
+    "jup.ag",
+    "raydium.io",
+    "marinade.finance",
+    "drift.trade",
+    "app.drift.trade",
+    "sol-incinerator.com",
+    "magiceden.io",
+    "phantom.app",
+    "orca.so",
+    "sns.id",
+    "revoke.cash",
+    "tensor.trade",
+    "solflare.com",
+    "okaybears.com"
+  ]
+}

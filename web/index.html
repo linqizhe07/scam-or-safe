@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scam or Safe</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">Scam <span class="or">or</span> Safe</div>
+    <div class="scores">
+      <div class="score"><span class="who">你</span><b id="human-score">0 / 0</b></div>
+      <div class="score"><span class="who">Agent</span><b id="agent-score">0 / 0</b></div>
+      <div class="score budget"><span class="who">Agent 预算</span><b id="budget-text">$0.000 / $0.25</b><div class="bar"><i id="budget-bar"></i></div></div>
+      <button id="reset" class="ghost" title="清空比分、预算和账本">重置</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="card" id="card">
+      <div class="card-head">
+        <div>
+          <div class="eyebrow"><span id="q-index">第 – 题</span> · <span id="q-domain" class="domain">–</span></div>
+          <h1 id="q-title">加载中…</h1>
+          <p class="prompt">“<span id="q-prompt"></span>”</p>
+        </div>
+        <div class="timer"><svg viewBox="0 0 40 40"><circle class="track" cx="20" cy="20" r="17"/><circle id="timer-arc" class="arc" cx="20" cy="20" r="17"/></svg><span id="timer-text">30</span></div>
+      </div>
+      <div class="chips" id="q-chips"></div>
+      <div class="wallet">
+        <div class="wallet-head">钱包会显示</div>
+        <ol id="q-instructions" class="ix-list"></ol>
+        <div id="q-message" class="message" hidden></div>
+        <div class="balances" id="q-balances"></div>
+      </div>
+      <div class="actions" id="actions">
+        <button id="btn-scam" class="big scam">Scam</button>
+        <button id="btn-safe" class="big safe">Safe</button>
+      </div>
+      <div class="actions after" id="actions-after" hidden>
+        <button id="btn-next" class="big next">下一题 →</button>
+      </div>
+    </section>
+
+    <section class="result" id="result" hidden>
+      <div class="result-head"><h2 id="r-headline"></h2><span id="r-verdict" class="pill"></span></div>
+      <div id="r-sections"></div>
+      <div class="lesson"><b>教训</b><p id="r-lesson"></p></div>
+      <div class="cases" id="r-cases"></div>
+    </section>
+
+    <aside class="agent" id="agent">
+      <div class="agent-head">
+        <h2>Agent</h2>
+        <button id="btn-agent" class="ghost">让 agent 判断这题</button>
+      </div>
+      <p class="agent-sub">先跑免费启发式；把握不够就花钱买检查（模拟 $0.02 · 地址 $0.01 · 程序 $0.01 · 域名 $0.005），预算花光就停。</p>
+      <ol id="agent-steps" class="steps"></ol>
+      <div class="ledger">
+        <div class="ledger-head">账本 <span id="ledger-count"></span></div>
+        <table id="ledger"><thead><tr><th>题</th><th>检查</th><th>价格</th><th>状态</th><th>理由</th></tr></thead><tbody></tbody></table>
+      </div>
+    </aside>
+  </main>
+
+  <footer><a href="/api/taxonomy" target="_blank">edge case 分类表</a> · <a href="https://github.com/linqizhe07/scam-or-safe" target="_blank">源码</a></footer>
+  <script src="app.js"></script>
+</body>
+</html>
