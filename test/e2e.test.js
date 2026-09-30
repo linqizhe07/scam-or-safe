@@ -7,7 +7,7 @@ import { createBudget } from '../agent/budget.js';
 import { createPayer } from '../agent/payer.js';
 import { createLedger } from '../server/ledger.js';
 
-const env = { PORT: '0', LEDGER_PATH: '', AGENT_BUDGET_USD: '0.25' };
+const env = { PORT: '0', AGENT_BUDGET_USD: '0.25' };
 let srv;
 test.before(async () => { srv = await start(env); });
 test.after(() => srv.server.close());
@@ -82,4 +82,33 @@ test('answer endpoint: coaches a wrong answer', async () => {
   assert.match(r.headline, /rejected a legitimate transaction/);
   assert.ok(r.sections.some((s) => s.title === 'Why it is safe' && s.items.length));
   assert.ok(r.cases.some((c) => c.id === 'F4'));
+});
+
+test('agent endpoint is stateless: the caller passes the budget and gets the new state and this round\'s ledger back', async () => {
+  const post = (id, body) => fetch(`${srv.baseUrl}/api/questions/${id}/agent`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).then((r) => r.json());
+  const first = await post('q10', { budget: { limitUsd: 0.25, perCallMaxUsd: 0.05, spent: 0 } });
+  assert.equal(first.verdict, 'scam');
+  assert.ok(first.budget.spent > 0);
+  assert.equal(first.ledger.length, first.budget.calls);
+  // Passing the returned budget back continues from the same running total.
+  const second = await post('q31', { budget: first.budget });
+  assert.ok(second.budget.spent >= first.budget.spent);
+  // A budget that is already spent gets a refusal, not a crash.
+  const broke = await post('q31', { budget: { limitUsd: 0.05, perCallMaxUsd: 0.05, spent: 0.05 } });
+  assert.ok(broke.transcript.some((s) => s.type === 'refused'));
+  assert.equal(broke.spentUsd, 0);
+});
+
+test('a signed nonce verifies without server memory; a tampered one does not', async () => {
+  const { createPaywall } = await import('../server/payment.js');
+  const a = createPaywall({ scheme: 'mock', payTo: 'x', secret: 's3cret' });
+  const b = createPaywall({ scheme: 'mock', payTo: 'x', secret: 's3cret' });
+  const quote = a.charge(0.01, 'test');
+  const res = { status() { return this; }, json(body) { this.body = body; return this; }, set() {} };
+  await quote({ get: () => undefined, path: '/check/address' }, res, () => {});
+  const nonce = res.body.accepts[0].nonce;
+  const header = Buffer.from(JSON.stringify({ scheme: 'mock', nonce, amount: '0.0100', payer: 'p' })).toString('base64');
+  assert.equal((await b.verify(header)).ok, true, 'a different instance with the same secret accepts the nonce');
+  const tampered = Buffer.from(JSON.stringify({ scheme: 'mock', nonce: nonce.slice(0, -2) + 'zz', amount: '0.0100', payer: 'p' })).toString('base64');
+  assert.equal((await b.verify(tampered)).reason, 'unknown_nonce');
 });

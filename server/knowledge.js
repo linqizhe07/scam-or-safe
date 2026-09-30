@@ -1,16 +1,13 @@
 // Loads the question bank and the ground truth. The four paid checks read from here; with LIVE=1, misses fall through to devnet (live.js).
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const here = path.dirname(fileURLToPath(import.meta.url));
-const DATA = path.join(here, '..', 'data');
-const read = (f) => JSON.parse(fs.readFileSync(path.join(DATA, f), 'utf8'));
+// The data files are imported statically (import attributes) so serverless bundlers trace and ship them.
+import taxonomyData from '../data/taxonomy.json' with { type: 'json' };
+import bankData from '../data/questions.json' with { type: 'json' };
+import kbData from '../data/knowledge.json' with { type: 'json' };
 
 export function loadKnowledge() {
-  const taxonomy = read('taxonomy.json');
-  const bank = read('questions.json');
-  const kb = read('knowledge.json');
+  const taxonomy = structuredClone(taxonomyData);
+  const bank = structuredClone(bankData);
+  const kb = structuredClone(kbData);
   const questions = bank.questions.map((q, i) => ({ ...q, index: i, surface: { ...bank.defaults, ...q.surface } }));
   const byId = new Map(questions.map((q) => [q.id, q]));
   const caseById = new Map(taxonomy.cases.map((c) => [c.id, c]));

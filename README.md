@@ -38,13 +38,14 @@ server/
   knowledge.js      reads the question bank and the fact base; domains not in the knowledge base go through heuristics (subdomain trick / homoglyph / brand keyword / typosquat)
   live.js           devnet skeleton (simulation, program check, payment verification, transfer) — unverified
   ledger.js         JSONL ledger
-  index.js          Express entry point: static page + game API + paid routes + agent trigger
+  index.js          Express entry point (stateless): static page + game API + paid routes + agent trigger
 agent/
   loop.js           agent loop: read the question → free heuristics → buy evidence → re-judge → answer; buy() handles the 402
   budget.js         budget counter (total + per-purchase cap)
   payer.js          payment adapter: mock / solana
   cli.js            run the whole question set from the command line
-web/                plain HTML + JS page
+public/             plain HTML + JS page, served statically; scores, budget and ledger live in localStorage
+api/index.js        Vercel entry: the same Express app as one serverless function
 docs/edge-cases.md  how to find edge cases, the categories, data shapes, how to add a case
 ```
 
@@ -78,6 +79,22 @@ Prices: simulation $0.02, address $0.01, program $0.01, domain $0.005. The agent
 ## Coverage
 
 60 cases: 45 have a question, 10 are still waiting for one, 5 are `depends` (a threshold has to be set first). `npm run coverage` prints the breakdown.
+
+## Deploy to Vercel
+
+The server keeps no state (scores, the agent's running budget and its ledger live in the browser; paywall nonces are HMAC-signed), so the whole Express app runs as one serverless function. `vercel.json` rewrites every non-static path to `api/index.js` and serves `public/` from the CDN.
+
+1. Push the repo to GitHub, then at https://vercel.com/new import `linqizhe07/scam-or-safe`. Framework preset: **Other**. No build command, no output directory.
+2. Optional environment variables: `PAYMENT_SECRET` (any long random string; signs the mock 402 nonces — set it so all instances agree), `AGENT_BUDGET_USD`, `AGENT_PER_CALL_MAX_USD`.
+3. Deploy. The agent pays its own deployment's `/check/*` routes over HTTPS, so keep the production deployment public (Vercel's deployment protection on preview URLs would block those self-calls).
+
+Or from the CLI:
+
+```text
+npm i -g vercel
+vercel login
+vercel --prod
+```
 
 ## Known limitations
 

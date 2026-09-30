@@ -1,7 +1,7 @@
 // Budget counter: the agent reserves before spending, and a refusal comes with a reason. Deliberately minimal: a total, a per-call cap, and spend history.
 // (When wired to agentpay, this layer becomes MandateWallet's policy gate; the interface stays the same.)
-export function createBudget({ limitUsd = 0.25, perCallMaxUsd = 0.05 } = {}) {
-  let spent = 0;
+export function createBudget({ limitUsd = 0.25, perCallMaxUsd = 0.05, spent: initialSpent = 0 } = {}) {
+  let spent = Number(initialSpent) || 0;
   const history = [];
   const round = (x) => Number(x.toFixed(4));
   return {

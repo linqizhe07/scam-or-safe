@@ -4,14 +4,23 @@ const short = (a) => (typeof a === 'string' && a.length > 14 ? `${a.slice(0, 4)}
 const api = async (url, body) => { const r = await fetch(url, body ? { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : undefined); return r.json(); };
 
 const ROUND_SECONDS = 30;
-let questions = [], cursor = 0, current = null, timer = null, remaining = ROUND_SECONDS, answered = false, prices = {};
+const STORE_KEY = 'scam-or-safe:v1';
+let questions = [], cursor = 0, current = null, timer = null, remaining = ROUND_SECONDS, answered = false, config = null, state = null;
+
+// All game state lives in this browser: scores, which questions were answered, the agent's running budget and its ledger.
+// The server is stateless, so this is what makes the game resumable and lets it run on serverless hosting.
+function freshState(cfg) {
+  return { scores: { human: { right: 0, wrong: 0 }, agent: { right: 0, wrong: 0 } }, answers: {}, budget: { limitUsd: cfg.budget.limitUsd, perCallMaxUsd: cfg.budget.perCallMaxUsd, spent: 0, remaining: cfg.budget.limitUsd, calls: 0 }, ledger: [] };
+}
+function loadState() { try { const raw = localStorage.getItem(STORE_KEY); return raw ? JSON.parse(raw) : null; } catch { return null; } }
+function saveState() { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch { /* private mode etc. */ } }
 
 async function boot() {
-  const state = await api('/api/state');
-  prices = state.prices; renderState(state);
+  config = await api('/api/config');
+  state = loadState() || freshState(config);
+  renderState(state);
   questions = await api('/api/questions');
-  cursor = Math.max(0, questions.findIndex((q) => !q.answered?.human));
-  if (cursor < 0) cursor = 0;
+  cursor = Math.max(0, questions.findIndex((q) => !state.answers[q.id]?.human));
   loadQuestion();
 }
 
@@ -73,9 +82,10 @@ function tick() { $('#timer-text').textContent = remaining; $('#timer-arc').styl
 async function answer(choice) {
   if (answered) return; answered = true; clearInterval(timer);
   $('#btn-scam').disabled = $('#btn-safe').disabled = true; $('#card').classList.add('answered');
-  const r = await api(`/api/questions/${current.id}/answer`, { who: 'human', answer: choice });
-  questions[cursor].answered = { ...(questions[cursor].answered || {}), human: { answer: choice, correct: r.correct } };
-  renderResult(r); renderScores(r.scores);
+  const r = await api(`/api/questions/${current.id}/answer`, { answer: choice });
+  if (!state.answers[current.id]) state.answers[current.id] = {};
+  if (!state.answers[current.id].human) { state.scores.human[r.correct ? 'right' : 'wrong']++; state.answers[current.id].human = { answer: choice, correct: r.correct }; saveState(); }
+  renderResult(r); renderScores(state.scores);
   $('#actions').hidden = true; $('#actions-after').hidden = false;
 }
 
@@ -92,15 +102,17 @@ function renderResult(r) {
 async function runAgent() {
   $('#btn-agent').disabled = true;
   const steps = $('#agent-steps'); steps.innerHTML = '';
-  const r = await api(`/api/questions/${current.id}/agent`, {});
+  const r = await api(`/api/questions/${current.id}/agent`, { budget: state.budget });
   if (r.error) { steps.innerHTML = `<li class="error">${r.error}</li>`; return; }
+  if (!state.answers[current.id]) state.answers[current.id] = {};
+  if (!state.answers[current.id].agent) { state.scores.agent[r.correct ? 'right' : 'wrong']++; state.answers[current.id].agent = { answer: r.verdict, correct: r.correct }; }
+  state.budget = r.budget; state.ledger.push(...r.ledger); saveState();
   for (const st of r.transcript) {
     await new Promise((res) => setTimeout(res, 350));
     const li = document.createElement('li'); li.className = st.type; li.innerHTML = `<span class="t">${st.type}</span>${st.text}`; steps.appendChild(li); li.scrollIntoView({ block: 'nearest' });
   }
   const li = document.createElement('li'); li.className = r.correct ? 'bought' : 'refused'; li.innerHTML = `<span class="t">result</span>${r.correct ? 'Correct' : 'Wrong'} (truth: ${r.truth === 'scam' ? 'Scam' : 'Safe'}), $${r.spentUsd.toFixed(3)} spent this round`; steps.appendChild(li);
-  questions[cursor].answered = { ...(questions[cursor].answered || {}), agent: { answer: r.verdict, correct: r.correct } };
-  renderScores(r.scores); renderBudget(r.budget); renderLedger((await api('/api/state')).ledger);
+  renderScores(state.scores); renderBudget(state.budget); renderLedger(state.ledger);
 }
 
 function renderState(s) { renderScores(s.scores); renderBudget(s.budget); renderLedger(s.ledger); }
@@ -119,6 +131,6 @@ $('#btn-scam').onclick = () => answer('scam');
 $('#btn-safe').onclick = () => answer('safe');
 $('#btn-next').onclick = () => { cursor++; loadQuestion(); };
 $('#btn-agent').onclick = runAgent;
-$('#reset').onclick = async () => { await api('/api/reset', {}); location.reload(); };
-document.addEventListener('keydown', (e) => { if (answered) { if (e.key === 'Enter' || e.key === ' ') $('#btn-next').click(); return; } if (e.key === 'ArrowLeft' || e.key === 's') answer('scam'); if (e.key === 'ArrowRight' || e.key === 'f') answer('safe'); if (e.key === 'a') runAgent(); });
+$('#reset').onclick = () => { try { localStorage.removeItem(STORE_KEY); } catch {} location.reload(); };
+document.addEventListener('keydown', (e) => { if (e.key === 'a' && !$('#btn-agent').disabled) return runAgent(); if (answered) { if (e.key === 'Enter' || e.key === ' ') $('#btn-next').click(); return; } if (e.key === 'ArrowLeft' || e.key === 's') answer('scam'); if (e.key === 'ArrowRight' || e.key === 'f') answer('safe'); });
 boot();
